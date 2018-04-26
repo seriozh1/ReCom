@@ -45,8 +45,8 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         //====================================
-        Intent i = new Intent(this, LoginActivity.class);
-        startActivity(i);
+        //Intent i = new Intent(this, LoginActivity.class);
+        //startActivity(i);
     }
 
     @Override
