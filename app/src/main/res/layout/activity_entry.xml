@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/entry_background_road_1"
+    android:orientation="vertical"
+    tools:context="com.s.samsungitschool.recom00.auth.EntryActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:text="@string/Enter"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:textColor="#EFD401"
+        android:gravity="center"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:gravity="center_horizontal|center"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/login_et"
+            android:layout_width="200dp"
+            android:layout_height="45dp"
+            android:layout_marginBottom="15dp"
+            android:hint="@string/login"
+            android:textColor="@android:color/background_dark"
+            android:textStyle="bold"/>
+
+        <EditText
+            android:id="@+id/password_et"
+            android:layout_width="200dp"
+            android:layout_height="45dp"
+            android:layout_marginBottom="15dp"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:textColor="@android:color/background_dark"
+            android:textStyle="bold"/>
+
+        <Button
+            android:id="@+id/login_in_bt"
+            style="@style/Base.Widget.AppCompat.Button.Colored"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:background="@color/colorAccent"
+            android:text="@string/login_in"
+            android:textSize="17sp"
+            android:textColor="#EFD401"
+            android:textStyle="italic"/>
+
+        <Button
+            android:id="@+id/register_bt"
+            style="@style/Base.Widget.AppCompat.Button.Colored"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:text="@string/registration"
+            android:textSize="17sp"
+            android:textColor="#EFD401"
+            android:textStyle="italic"/>
+
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
