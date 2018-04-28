@@ -19,4 +19,37 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+    <string name="camera">Камера</string>
+    <string name="map">Карта</string>
+    <string name="login">Логин</string>
+    <string name="password">Пароль</string>
+    <string name="login_in">Войти</string>
+    <string name="sign_up">Зарегистрироваться</string>
+    <string name="title_activity_maps_main">Map</string>
+    <string name="open_map">Open Map</string>
+    <string name="test">Test</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="road_quality_checker">Road Quality Checker</string>
+    <string name="send_a_complaint">Отправить жалобу</string>
+    <string name="settings">Настройки</string>
+    <string name="title_activity_registration">RegistrationActivity</string>
+    <string name="registration">Регистрация</string>
+    <string name="Enter">Вход</string>
+    <string name="Registration">Регистрация</string>
+    <string name="email">Почта</string>
+    <string name="title_activity_main1">Main1Activity</string>
+    <string name="Profile">Профиль</string>
+    <string name="Share">Поделится</string>
+    <string name="new_statement">Новое заявление</string>
+    <string name="Settings">Настройки</string>
+    <string name="News">Новости</string>
+    <string name="Rating">Рейтинг</string>
+    <string name="Feedback">Обратная связь</string>
+    <string name="Education">Обучение</string>
+    <string name="Draft">Черновики</string>
+    <string name="About">О приложении</string>
+    <string name="Applications">Заявления</string>
+    <string name="Achievements">Достижения</string>
+
 </resources>

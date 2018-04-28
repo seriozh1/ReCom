@@ -5,33 +5,57 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_menu_profile"
+            android:title="@string/Profile" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:id="@+id/nav_new_app"
+            android:icon="@drawable/ic_menu_new_app"
+            android:title="@string/new_statement" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:id="@+id/nav_map"
+            android:icon="@drawable/ic_menu_map"
+            android:title="@string/map" />
         <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:id="@+id/nav_applications"
+            android:icon="@drawable/ic_menu_applications"
+            android:title="@string/Applications" />
+        <item
+            android:id="@+id/nav_draft"
+            android:icon="@drawable/in_main_draft"
+            android:title="@string/Draft" />
+        <item
+            android:id="@+id/nav_rating"
+            android:icon="@drawable/ic_menu_rating"
+            android:title="@string/Rating" />
+        <item
+            android:id="@+id/nav_achievements"
+            android:icon="@drawable/ic_menu_achievements"
+            android:title="@string/Achievements" />
+        <item
+            android:id="@+id/nav_news"
+            android:icon="@drawable/ic_menu_news"
+            android:title="@string/News" />
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_menu_settings"
+            android:title="@string/Settings" />
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_menu_about"
+            android:title="@string/About" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="@string/Feedback">
         <menu>
             <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:title="@string/Share" />
             <item
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:title="Отправить отзыв" />
         </menu>
     </item>
 
