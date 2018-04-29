@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:card_view="http://schemas.android.com/tools">
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="50sp"
+        android:paddingBottom="50sp"
+        android:layout_gravity="center"
+        android:background="@drawable/ic_menu_new_app"/>
+
+    <android.support.v7.widget.CardView card_view:id="@+id/profile_main_card"
+    card_view:clickable="true"
+    card_view:layout_width="match_parent"
+    card_view:layout_height="wrap_content"
+    card_view:layout_margin="10dp"
+    card_view:foreground="?attr/selectableItemBackground"
+    card_view:layout_alignParentTop="true"
+    card_view:cardBackgroundColor="#999999"
+    card_view:cardCornerRadius="10dp"
+    card_view:cardElevation="5dp"
+    card_view:contentPadding="0dp">
+        <RelativeLayout card_view:layout_width="match_parent" card_view:layout_height="match_parent">
+
+            <ImageView card_view:id="@+id/profile_user_icon" card_view:paddingTop="15dp"
+                card_view:paddingBottom="5dp"
+                card_view:layout_width="UNKNOWN_DATA_0x6401"
+                card_view:layout_height="UNKNOWN_DATA_0x6401"
+                card_view:layout_alignParentTop="true"
+                card_view:layout_centerHorizontal="true"
+                card_view:contentDescription="@string/description"
+                card_view:srcCompat="@drawable/unknown_achieve_icon" />
+
+            <TextView card_view:textSize="40sp" card_view:textStyle="bold" card_view:textColor="#222" card_view:gravity="top|bottom|left|right|center_vertical|fill_vertical|center_horizontal|fill_horizontal|center|fill|start|end" card_view:id="@+id/profile_username" card_view:layout_width="wrap_content" card_view:layout_height="wrap_content" card_view:layout_below="@+id/profile_user_icon" card_view:layout_centerHorizontal="true" />
+            <TextView card_view:textSize="20sp" card_view:id="@+id/profile_status" card_view:paddingBottom="15dp" card_view:layout_width="wrap_content" card_view:layout_height="wrap_content" card_view:text="Проверяем пометку…" card_view:layout_below="@+id/profile_username" card_view:layout_centerHorizontal="true" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+    <android.support.v7.widget.CardView card_view:id="@+id/profile_points_card" card_view:clickable="true" card_view:layout_width="match_parent" card_view:layout_height="wrap_content"
+        card_view:layout_margin="10dp"
+        card_view:foreground="?attr/selectableItemBackground"
+        card_view:layout_below="@+id/profile_main_card"
+        card_view:cardBackgroundColor="#566"
+        card_view:cardCornerRadius="10dp"
+        card_view:cardElevation="5dp" card_view:contentPadding="5dp">
+
+        <RelativeLayout card_view:layout_width="match_parent"
+            card_view:layout_height="match_parent">
+
+            <ImageView card_view:id="@+id/profile_points_icon"
+                card_view:padding="10dp"
+                card_view:layout_width="UNKNOWN_DATA_0x6401"
+                card_view:layout_height="UNKNOWN_DATA_0x6401"
+                card_view:layout_alignParentTop="true"
+                card_view:foregroundGravity="left|right|center_horizontal|fill_horizontal|center|fill"
+                card_view:contentDescription="@string/description"
+                card_view:srcCompat="@drawable/profile_points_icon_2" />
+
+            <TextView card_view:textSize="45sp"
+                card_view:textStyle="bold"
+                card_view:textColor="#ffffff"
+                card_view:id="@+id/profile_points"
+                card_view:paddingLeft="10dp"
+                card_view:paddingTop="0dp"
+                card_view:layout_width="wrap_content"
+                card_view:layout_height="wrap_content"
+                card_view:text="Загрузка…"
+                card_view:layout_toRightOf="@+id/profile_points_icon" />
+
+            <TextView card_view:textSize="20sp" card_view:textColor="#ffffff"
+                card_view:id="@+id/profile_points_call"
+                card_view:paddingLeft="10dp"
+                card_view:layout_width="wrap_content"
+                card_view:layout_height="wrap_content"
+                card_view:text="Очков получено"
+                card_view:layout_toRightOf="@+id/profile_points_icon" card_view:layout_below="@+id/profile_points" />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView card_view:id="@+id/profile_used_card"
+        card_view:clickable="true" card_view:layout_width="match_parent"
+        card_view:layout_height="wrap_content"
+        card_view:layout_margin="10dp"
+        card_view:foreground="?attr/selectableItemBackground"
+        card_view:layout_below="@+id/profile_points_card"
+        card_view:cardBackgroundColor="#944"
+        card_view:cardCornerRadius="10dp"
+        card_view:cardElevation="5dp" card_view:contentPadding="5dp">
+
+        <RelativeLayout card_view:layout_width="match_parent"
+            card_view:layout_height="match_parent">
+
+            <ImageView card_view:id="@+id/profile_used_icon"
+                card_view:padding="10dp" card_view:layout_width="UNKNOWN_DATA_0x6401"
+                card_view:layout_height="UNKNOWN_DATA_0x6401"
+                card_view:layout_alignParentTop="true"
+                card_view:foregroundGravity="left|right|center_horizontal|fill_horizontal|center|fill"
+                card_view:contentDescription="@string/description"
+                card_view:srcCompat="@drawable/profile_used_icon" />
+
+            <TextView card_view:textSize="45sp"
+                card_view:textStyle="bold"
+                card_view:textColor="#ffffff"
+                card_view:id="@+id/profile_used"
+                card_view:paddingLeft="10dp"
+                card_view:layout_width="wrap_content"
+                card_view:layout_height="wrap_content"
+                card_view:text="Загрузка…"
+                card_view:layout_toRightOf="@+id/profile_used_icon"
+                card_view:layout_centerHorizontal="true" />
+
+            <TextView card_view:textSize="20sp" card_view:textColor="#ffffff"
+                card_view:id="@+id/profile_used_call"
+                card_view:paddingLeft="10dp"
+                card_view:layout_width="wrap_content"
+                card_view:layout_height="wrap_content" card_view:text="Экопунктов использовано" card_view:layout_toRightOf="@+id/profile_used_icon" card_view:layout_below="@+id/profile_used" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+    <android.support.v7.widget.CardView card_view:id="@+id/profile_rank_card" card_view:clickable="true" card_view:layout_width="match_parent" card_view:layout_height="wrap_content" card_view:layout_margin="10dp" card_view:foreground="?attr/selectableItemBackground" card_view:layout_below="@+id/profile_used_card" card_view:cardBackgroundColor="#988" card_view:cardCornerRadius="10dp" card_view:cardElevation="5dp" card_view:contentPadding="5dp">
+        <RelativeLayout card_view:layout_width="match_parent" card_view:layout_height="match_parent">
+            <ImageView card_view:id="@+id/profile_rank_icon" card_view:padding="10dp" card_view:layout_width="UNKNOWN_DATA_0x6401" card_view:layout_height="UNKNOWN_DATA_0x6401" card_view:layout_alignParentTop="true" card_view:foregroundGravity="left|right|center_horizontal|fill_horizontal|center|fill" card_view:contentDescription="@string/description" card_view:srcCompat="@drawable/profile_rank_icon" />
+            <TextView card_view:textSize="45sp" card_view:textStyle="bold" card_view:textColor="#ffffff" card_view:id="@+id/profile_rank" card_view:paddingLeft="10dp" card_view:layout_width="wrap_content" card_view:layout_height="wrap_content" card_view:text="Загрузка…" card_view:layout_toRightOf="@+id/profile_rank_icon" card_view:layout_centerHorizontal="true" />
+            <TextView card_view:textSize="20sp" card_view:textColor="#ffffff" card_view:id="@+id/profile_rank_call" card_view:paddingLeft="10dp" card_view:layout_width="wrap_content" card_view:layout_height="wrap_content" card_view:text="Ваше звание" card_view:layout_toRightOf="@+id/profile_rank_icon" card_view:layout_below="@+id/profile_rank" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+    <android.support.v7.widget.CardView card_view:id="@+id/profile_achieves_card" card_view:clickable="true" card_view:layout_width="match_parent" card_view:layout_height="wrap_content" card_view:layout_margin="10dp" card_view:foreground="?attr/selectableItemBackground" card_view:layout_below="@+id/profile_rank_card" card_view:cardBackgroundColor="#877" card_view:cardCornerRadius="10dp" card_view:cardElevation="5dp" card_view:contentPadding="5dp">
+        <RelativeLayout card_view:layout_width="match_parent" card_view:layout_height="match_parent">
+            <ImageView card_view:id="@+id/profile_achieves_icon" card_view:padding="10dp" card_view:layout_width="UNKNOWN_DATA_0x6401" card_view:layout_height="UNKNOWN_DATA_0x6401" card_view:layout_alignParentTop="true" card_view:foregroundGravity="left|right|center_horizontal|fill_horizontal|center|fill" card_view:contentDescription="@string/description" card_view:srcCompat="@drawable/profile_achieves_icon" />
+            <TextView card_view:textSize="45sp" card_view:textStyle="bold" card_view:textColor="#ffffff" card_view:id="@+id/profile_achieves" card_view:paddingLeft="10dp" card_view:layout_width="wrap_content" card_view:layout_height="wrap_content" card_view:text="Загрузка…" card_view:layout_toRightOf="@+id/profile_achieves_icon" card_view:layout_centerHorizontal="true" />
+            <TextView card_view:textSize="20sp" card_view:textColor="#ffffff" card_view:id="@+id/profile_achieves_call" card_view:paddingLeft="10dp" card_view:layout_width="wrap_content" card_view:layout_height="wrap_content" card_view:text="Достижений открыто" card_view:layout_toRightOf="@+id/profile_achieves_icon" card_view:layout_below="@+id/profile_achieves" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+    <android.support.v7.widget.CardView card_view:id="@+id/profile_saved_trees_card" card_view:clickable="true" card_view:layout_width="match_parent" card_view:layout_height="wrap_content" card_view:layout_margin="10dp" card_view:foreground="?attr/selectableItemBackground" card_view:layout_below="@+id/profile_achieves_card" card_view:cardBackgroundColor="#900" card_view:cardCornerRadius="10dp" card_view:cardElevation="5dp" card_view:contentPadding="5dp">
+        <RelativeLayout card_view:layout_width="match_parent" card_view:layout_height="match_parent">
+            <ImageView card_view:id="@+id/profile_saved_trees_icon" card_view:padding="10dp" card_view:layout_width="UNKNOWN_DATA_0x6401" card_view:layout_height="UNKNOWN_DATA_0x6401" card_view:layout_alignParentTop="true" card_view:foregroundGravity="left|right|center_horizontal|fill_horizontal|center|fill" card_view:contentDescription="@string/description" card_view:srcCompat="@drawable/profile_saved_trees_icon" />
+            <TextView card_view:textSize="45sp" card_view:textStyle="bold" card_view:textColor="#ffffff" card_view:id="@+id/profile_saved_trees" card_view:paddingLeft="10dp" card_view:layout_width="wrap_content" card_view:layout_height="wrap_content" card_view:text="Загрузка…" card_view:layout_toRightOf="@+id/profile_saved_trees_icon" card_view:layout_centerHorizontal="true" />
+            <TextView card_view:textSize="20sp" card_view:textColor="#ffffff" card_view:id="@+id/profile_saved_trees_call" card_view:paddingLeft="10dp" card_view:layout_width="wrap_content" card_view:layout_height="wrap_content" card_view:text="Деревьев спасено" card_view:layout_toRightOf="@+id/profile_saved_trees_icon" card_view:layout_below="@+id/profile_saved_trees" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+    <android.support.v7.widget.CardView card_view:id="@+id/profile_saved_animals_card" card_view:clickable="true" card_view:layout_width="match_parent" card_view:layout_height="wrap_content" card_view:layout_margin="10dp" card_view:foreground="?attr/selectableItemBackground" card_view:layout_below="@+id/profile_saved_trees_card" card_view:cardBackgroundColor="#566" card_view:cardCornerRadius="10dp" card_view:cardElevation="5dp" card_view:contentPadding="5dp">
+        <RelativeLayout card_view:layout_width="match_parent" card_view:layout_height="match_parent">
+            <ImageView card_view:id="@+id/profile_saved_animals_icon" card_view:padding="10dp" card_view:layout_width="UNKNOWN_DATA_0x6401" card_view:layout_height="UNKNOWN_DATA_0x6401" card_view:layout_alignParentTop="true" card_view:foregroundGravity="left|right|center_horizontal|fill_horizontal|center|fill" card_view:contentDescription="@string/description" card_view:srcCompat="@drawable/profile_saved_animals_icon" />
+            <TextView card_view:textSize="45sp" card_view:textStyle="bold" card_view:textColor="#ffffff" card_view:id="@+id/profile_saved_animals" card_view:paddingLeft="10dp" card_view:layout_width="wrap_content" card_view:layout_height="wrap_content" card_view:text="Загрузка…" card_view:layout_toRightOf="@+id/profile_saved_animals_icon" card_view:layout_centerHorizontal="true" />
+            <TextView card_view:textSize="20sp" card_view:textColor="#ffffff" card_view:id="@+id/profile_saved_animals_call" card_view:paddingLeft="10dp" card_view:layout_width="wrap_content" card_view:layout_height="wrap_content" card_view:text="Животных спасено" card_view:layout_toRightOf="@+id/profile_saved_animals_icon" card_view:layout_below="@+id/profile_saved_animals" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+    <android.support.v7.widget.CardView card_view:id="@+id/profile_saved_people_card" card_view:clickable="true" card_view:layout_width="match_parent" card_view:layout_height="wrap_content" card_view:layout_margin="10dp" card_view:foreground="?attr/selectableItemBackground" card_view:layout_below="@+id/profile_saved_animals_card" card_view:cardBackgroundColor="#999" card_view:cardCornerRadius="10dp" card_view:cardElevation="5dp" card_view:contentPadding="5dp">
+        <RelativeLayout card_view:layout_width="match_parent" card_view:layout_height="match_parent">
+            <ImageView card_view:id="@+id/profile_saved_people_icon" card_view:padding="10dp" card_view:layout_width="UNKNOWN_DATA_0x6401" card_view:layout_height="UNKNOWN_DATA_0x6401" card_view:layout_alignParentTop="true" card_view:foregroundGravity="left|right|center_horizontal|fill_horizontal|center|fill" card_view:contentDescription="@string/description" card_view:srcCompat="@drawable/profile_saved_people_icon" />
+            <TextView card_view:textSize="45sp" card_view:textStyle="bold" card_view:textColor="#ffffff" card_view:id="@+id/profile_saved_people" card_view:paddingLeft="10dp" card_view:layout_width="wrap_content" card_view:layout_height="wrap_content" card_view:text="Загрузка…" card_view:layout_toRightOf="@+id/profile_saved_people_icon" card_view:layout_centerHorizontal="true" />
+            <TextView card_view:textSize="20sp" card_view:textColor="#ffffff" card_view:id="@+id/profile_saved_people_call" card_view:paddingLeft="10dp" card_view:layout_width="wrap_content" card_view:layout_height="wrap_content" card_view:text="Человек спасено" card_view:layout_toRightOf="@+id/profile_saved_people_icon" card_view:layout_below="@+id/profile_saved_people" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

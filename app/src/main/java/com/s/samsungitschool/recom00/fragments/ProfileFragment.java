@@ -9,8 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.s.samsungitschool.recom00.MainActivity;
-import com.s.samsungitschool.recom00.MapsActivity;
 import com.s.samsungitschool.recom00.R;
 import com.s.samsungitschool.recom00.auth.EntryActivity;
 
@@ -25,7 +23,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.profile_fragment, container, false);
+        return inflater.inflate(R.layout.f_profile_fragment, container, false);
     }
 
     @Override
