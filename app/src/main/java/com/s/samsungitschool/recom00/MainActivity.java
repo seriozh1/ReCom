@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.MapFragment;
 import com.s.samsungitschool.recom00.auth.EntryActivity;
 import com.s.samsungitschool.recom00.fragments.ProfileFragment;
 
@@ -92,8 +93,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_new_app) {
 
         } else if (id == R.id.nav_map) {
-            Intent mapIntent = new Intent(getBaseContext(), MapsActivity.class);
-            startActivity(mapIntent);
+            /*Intent mapIntent = new Intent(getBaseContext(), MapsActivity.class);
+            startActivity(mapIntent);*/
+            fragment = new MapFragment();
         } else if (id == R.id.nav_applications) {
 
         } else if (id == R.id.nav_draft) {
