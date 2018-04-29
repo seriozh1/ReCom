@@ -130,19 +130,150 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
 
-        /*try {
-            assert fragmentClass != null;
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
-            Toast.makeText(getBaseContext(), "Ошибка", Toast.LENGTH_SHORT).show();
+
+}
+
+/*
+
+public class MainActivity extends NetIntegrationActivity implements OnNavigationItemSelectedListener {
+    AboutFragment aboutFragment;
+    AchievementsFragment achievementsFragment;
+    ConsoleFragment consoleFragment;
+    EventsFragment eventsFragment;
+    FeedbackFragment feedbackFragment;
+    GratitudeFragment gratitudeFragment;
+    public boolean mLocationPermissionGranted;
+    MapFragment mapFragment;
+    NewsFragment newsFragment;
+    ProfileFragment profileFragment;
+    ProgressFragment progressFragment;
+    RatingFragment ratingFragment;
+    SettingsFragment settingsFragment;
+    ShareFragment shareFragment;
+    TrainingFragment trainingFragment;
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (this.user == null) {
+            startActivity(new Intent(this, AuthActivity.class));
+            finish();
         }
+        if (ContextCompat.checkSelfPermission(this, "android.permission.ACCESS_FINE_LOCATION") == 0) {
+            this.mLocationPermissionGranted = true;
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{"android.permission.ACCESS_FINE_LOCATION"}, 5);
+        }
+        this.aboutFragment = new AboutFragment();
+        this.achievementsFragment = new AchievementsFragment();
+        this.feedbackFragment = new FeedbackFragment();
+        this.gratitudeFragment = new GratitudeFragment();
+        this.mapFragment = new MapFragment();
+        this.profileFragment = new ProfileFragment();
+        this.progressFragment = new ProgressFragment();
+        this.ratingFragment = new RatingFragment();
+        this.consoleFragment = new ConsoleFragment();
+        this.newsFragment = new NewsFragment();
+        this.settingsFragment = new SettingsFragment();
+        this.shareFragment = new ShareFragment();
+        this.trainingFragment = new TrainingFragment();
+        this.eventsFragment = new EventsFragment();
+        FragmentTransaction fragmentTransaction1 = getFragmentManager().beginTransaction();
+        fragmentTransaction1.replace(R.id.container, this.progressFragment);
+        fragmentTransaction1.commit();
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+        ((NavigationView) findViewById(R.id.nav_view)).setNavigationItemSelectedListener(this);
+    }
 
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(8388611)) {
+            drawer.closeDrawer(8388611);
+        } else {
+            super.onBackPressed();
+        }
+    }
 
-        item.setChecked(true);
-        setTitle(item.getTitle());*/
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        if (id == R.id.nav_progress) {
+            fragmentTransaction.replace(R.id.container, this.progressFragment);
+        } else if (id == R.id.nav_map) {
+            fragmentTransaction.replace(R.id.container, this.mapFragment);
+        } else if (id == R.id.nav_rating) {
+            fragmentTransaction.replace(R.id.container, this.ratingFragment);
+        } else if (id == R.id.nav_profile) {
+            fragmentTransaction.replace(R.id.container, this.profileFragment);
+        } else if (id == R.id.nav_achievements) {
+            fragmentTransaction.replace(R.id.container, this.achievementsFragment);
+        } else if (id == R.id.nav_events) {
+            fragmentTransaction.replace(R.id.container, this.eventsFragment);
+        } else if (id == R.id.nav_training) {
+            fragmentTransaction.replace(R.id.container, this.trainingFragment);
+        } else if (id == R.id.nav_console) {
+            fragmentTransaction.replace(R.id.container, this.consoleFragment);
+        } else if (id == R.id.nav_news) {
+            fragmentTransaction.replace(R.id.container, this.newsFragment);
+        } else if (id == R.id.nav_settings) {
+            fragmentTransaction.replace(R.id.container, this.settingsFragment);
+        } else if (id == R.id.nav_share) {
+            fragmentTransaction.replace(R.id.container, this.shareFragment);
+        } else if (id == R.id.nav_feedback) {
+            fragmentTransaction.replace(R.id.container, this.feedbackFragment);
+        } else if (id == R.id.nav_about) {
+            fragmentTransaction.replace(R.id.container, this.aboutFragment);
+        }
+        fragmentTransaction.commit();
+        ((DrawerLayout) findViewById(R.id.drawer_layout)).closeDrawer(8388611);
+        return true;
+    }
+
+    public static void deleteCache(Context context) {
+        try {
+            deleteDir(context.getCacheDir());
+        } catch (Exception e) {
+        }
+    }
+
+    public static boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            for (String aChildren : dir.list()) {
+                if (!deleteDir(new File(dir, aChildren))) {
+                    return false;
+                }
+            }
+            return dir.delete();
+        } else if (dir != null && dir.isFile() && dir.delete()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void setActionBarTitle(String title) {
+        getSupportActionBar().setTitle(title);
     }
 }
+
+ */
