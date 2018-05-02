@@ -9,12 +9,16 @@ import android.view.ViewGroup;
 
 import com.s.samsungitschool.recom00.R;
 
-public class ApplicationsFragment extends Fragment {
+/**
+ * Created by Админ on 02.05.2018.
+ */
+
+public class AboutFragmentActivity extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.f_applications_fragment, container, false);
+        return inflater.inflate(R.layout.f_about_fragment, container, false);
     }
 
     @Override

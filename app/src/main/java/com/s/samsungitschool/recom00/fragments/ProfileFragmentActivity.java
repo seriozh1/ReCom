@@ -13,7 +13,7 @@ import com.s.samsungitschool.recom00.R;
 import com.s.samsungitschool.recom00.auth.EntryActivity;
 
 
-public class ProfileFragment extends Fragment implements View.OnClickListener {
+public class ProfileFragmentActivity extends Fragment implements View.OnClickListener {
 
     /*@Nullable
     @Override

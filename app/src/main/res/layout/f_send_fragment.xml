@@ -9,6 +9,6 @@
         android:layout_gravity="center"
         android:layout_marginTop="50sp"
         android:layout_marginBottom="50sp"
-        android:background="@drawable/ic_menu_applications"/>
+        android:background="@drawable/ic_menu_send"/>
 
 </LinearLayout>
