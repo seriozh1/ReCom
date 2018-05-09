@@ -14,11 +14,7 @@ public class EntryActivity extends AppCompatActivity {
     EditText loginEt, passwordEt;
     Button loginIn, goToRegister;
 
-    private static String login = "";
-    private static String password = "";
 
-    // TODO Указать название сервера
-    private static String server = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

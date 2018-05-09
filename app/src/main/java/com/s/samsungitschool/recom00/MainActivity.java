@@ -12,7 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.android.gms.maps.MapFragment;
+//import com.google.android.gms.maps.MapFragment;
 import com.s.samsungitschool.recom00.fragments.AboutFragmentActivity;
 import com.s.samsungitschool.recom00.fragments.AchievementsFragmentActivity;
 import com.s.samsungitschool.recom00.fragments.ApplicationsFragmentActivity;
@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -152,7 +153,7 @@ public class MainActivity extends AppCompatActivity
         else if (id == R.id.nav_send) {
             fragmentTransaction.replace(R.id.container, this.sendFragmentActivity);
         }
-        
+
         item.setChecked(true);
         setTitle(item.getTitle());
         fragmentTransaction.commit();

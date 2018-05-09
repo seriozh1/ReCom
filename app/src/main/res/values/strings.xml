@@ -51,5 +51,7 @@
     <string name="About">О приложении</string>
     <string name="Applications">Заявления</string>
     <string name="Achievements">Достижения</string>
+    <string name="Confirm_password">Повторите пароль</string>
+    <string name="Already_register">Уже зарегистрирован</string>
 
 </resources>
