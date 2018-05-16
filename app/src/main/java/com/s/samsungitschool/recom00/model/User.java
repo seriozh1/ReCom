@@ -1,24 +1,20 @@
 package com.s.samsungitschool.recom00.model;
 
-public class BaseUser {
-    private int id;
-    private String login, email;
+public class User {
+    private String login, email, password;
     private int points;
-    private String rank;
 
-    public BaseUser() {
+    public User() {
 
     }
 
-    public BaseUser(int id, String login, String email) {
-        this.id = id;
+    public User(int id, String login, String email, String password, int points) {
         this.login = login;
         this.email = email;
+        this.password = password;
+        this.points = points;
     }
 
-    public int getId() {
-        return id;
-    }
 
     public String getLogin() {
         return login;
@@ -32,13 +28,6 @@ public class BaseUser {
         return points;
     }
 
-    public String getRank() {
-        return rank;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public void setLogin(String login) {
         this.login = login;
@@ -52,7 +41,4 @@ public class BaseUser {
         this.points = points;
     }
 
-    public void setRank(String rank) {
-        this.rank = rank;
-    }
 }

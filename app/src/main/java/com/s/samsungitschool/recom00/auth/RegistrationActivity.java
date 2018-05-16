@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,7 +15,7 @@ import android.widget.Toast;
 
 import com.s.samsungitschool.recom00.R;
 import com.s.samsungitschool.recom00.interfaces.RegisterUserService;
-import com.s.samsungitschool.recom00.model.BaseUser;
+import com.s.samsungitschool.recom00.model.User;
 
 import java.io.IOException;
 
@@ -28,10 +27,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RegistrationActivity extends AppCompatActivity {
 
     private static final String TAG = "RegistrationActivity";
-    private static final String URI_FOR_REGISTRATION = "http/localhost:8080";
+    private static final String URI_FOR_REGISTRATION = "http//171.33.253.145";
 
     ProgressDialog progressDialog;
-    AlertDialog.Builder alertDialogBuilder;
+    AlertDialog.Builder alertDialogBuilderInput, alertDialogBuilderRegister;
 
     private EditText loginEt, emailEt, passwordEt, passwordConfirmEt;
     private Button registerBt, entryBt;
@@ -39,8 +38,8 @@ public class RegistrationActivity extends AppCompatActivity {
     private String login = "";
     private String email = "";
     private String password = "";
-    private BaseUser userFromServer;
-
+    private User userFromServer;
+    private String serverAnsString;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +47,9 @@ public class RegistrationActivity extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
-        alertDialogBuilder = new AlertDialog.Builder(RegistrationActivity.this);
+
+        alertDialogBuilderInput = new AlertDialog.Builder(RegistrationActivity.this);
+        alertDialogBuilderRegister = new AlertDialog.Builder(RegistrationActivity.this);
 
         loginEt = (EditText) findViewById(R.id.login_registration_et);
         passwordEt = (EditText) findViewById(R.id.password_registration_et);
@@ -81,13 +82,13 @@ public class RegistrationActivity extends AppCompatActivity {
                 || passwordEt.getText().toString().equals("")
                 || passwordConfirmEt.getText().toString().equals("")) {
 
-            alertDialogBuilder.setTitle("Что то пошле не так");
-            alertDialogBuilder.setMessage("Заполните все поля");
+            alertDialogBuilderInput.setTitle("Ошибка");
+            alertDialogBuilderInput.setMessage("Заполните все поля");
             displayAlert("input_error");
         } else if ( !passwordEt.getText().toString().equals(passwordConfirmEt.getText().toString())) {
 
-            alertDialogBuilder.setTitle("Что то пошле не так");
-            alertDialogBuilder.setMessage("Пароли не совпадают");
+            alertDialogBuilderInput.setTitle("Ошибка");
+            alertDialogBuilderInput.setMessage("Пароли не совпадают");
             displayAlert("input_error");
         } else {
             login = loginEt.getText().toString();
@@ -109,14 +110,37 @@ public class RegistrationActivity extends AppCompatActivity {
                     .build();
 
             RegisterUserService registerUserService = retrofit.create(RegisterUserService.class);
-            Call<BaseUser> call = registerUserService.register(login, email, password);
+            Call<String> call = registerUserService.register(login, email, password);
             try {
-                Response<BaseUser> userResponse = call.execute();
-                userFromServer = userResponse.body();
-                //Log.d(LOG_TAG, userResponse.body());
+                Response<String> userResponse = call.execute();
+                serverAnsString = userResponse.body();
+
+                if (serverAnsString.equals("Login already registered")) {
+
+                    alertDialogBuilderRegister.setTitle("Ошибка");
+                    alertDialogBuilderRegister.setMessage("Пользователь с таким логином уже существует.");
+                    displayAlert("registration_login_error");
+                } else if (serverAnsString.equals("Email already registered")) {
+
+                    alertDialogBuilderRegister.setTitle("Ошибка");
+                    alertDialogBuilderRegister.setMessage("Пользователь с такой почтой уже существует.");
+                    displayAlert("registration_email_error");
+                } else {
+                    alertDialogBuilderRegister.setTitle("Успешно");
+                    alertDialogBuilderRegister.setMessage("Вы успешно прошли регистрацию.");
+                    displayAlert("registration_OK");
+
+                    Intent intent = new Intent(getApplicationContext(), EntryActivity.class);
+                    startActivity(intent);
+                }
+
+
             } catch (IOException e) {
                 e.printStackTrace();
-                Toast.makeText(getBaseContext(), "Ошибка" + e, Toast.LENGTH_LONG).show();
+                Toast.makeText(getBaseContext(), "Ошибка сервера" + e, Toast.LENGTH_LONG).show();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+                Toast.makeText(getBaseContext(), "Ошибка сервера" + e, Toast.LENGTH_LONG).show();
             }
             return null;
         }
@@ -128,18 +152,39 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     private void displayAlert(final String code) {
-        alertDialogBuilder.setPositiveButton("Ок", new DialogInterface.OnClickListener() {
+        alertDialogBuilderInput.setPositiveButton("Ок", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (code.equals("input_error")) {
                     passwordEt.setText("");
                     passwordConfirmEt.setText("");
+
+                } else if (code.equals("registration_login_error")) {
+                    loginEt.setText("");
+                    passwordEt.setText("");
+                    passwordConfirmEt.setText("");
+
+                } else if (code.equals("registration_email_error")) {
+                    emailEt.setText("");
+                    passwordEt.setText("");
+                    passwordConfirmEt.setText("");
+
+                } else if (code.equals("registration_OK")) {
+
                 }
             }
         });
 
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
+        if (code.equals("input_error")) {
+            AlertDialog alertDialog = alertDialogBuilderInput.create();
+            alertDialog.show();
+        } else if (code.equals("registration_login_error")
+                || code.equals("registration_email_error")
+                || code.equals("registration_OK")) {
+            AlertDialog alertDialog = alertDialogBuilderRegister.create();
+            alertDialog.show();
+        }
+
     }
 
     private void showDialog() {

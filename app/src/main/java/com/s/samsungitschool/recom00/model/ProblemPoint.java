@@ -1,15 +1,15 @@
 package com.s.samsungitschool.recom00.model;
 
 
-public class BasePoint {
+public class ProblemPoint {
     String lat, lng;
     int quantity;
 
-    public BasePoint() {
+    public ProblemPoint() {
 
     }
 
-    public BasePoint(String lat, String lng, int quantity) {
+    public ProblemPoint(String lat, String lng, int quantity) {
         this.lat = lat;
         this.lng = lng;
         this.quantity = quantity;
