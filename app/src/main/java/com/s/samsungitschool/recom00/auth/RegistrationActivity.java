@@ -12,12 +12,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+
 
 import com.s.samsungitschool.recom00.R;
 import com.s.samsungitschool.recom00.interfaces.RegisterUserService;
 import com.s.samsungitschool.recom00.model.User;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -94,6 +98,7 @@ public class RegistrationActivity extends AppCompatActivity {
             login = loginEt.getText().toString();
             email = emailEt.getText().toString();
             password = passwordEt.getText().toString();
+            password = getHashString(password);
 
             new RegisterAsyncTask().execute("");
         }
@@ -199,27 +204,20 @@ public class RegistrationActivity extends AppCompatActivity {
             progressDialog.dismiss();
     }
 
-    /*class SendData extends AsyncTask<Void, Void, Void> {
+    String getHashString(String string) {
+        String result = string;
 
-        String resultString = null;
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            md.update(Byte.parseByte(string));
+            byte[] hash = md.digest();
+            result = new String(hash, StandardCharsets.UTF_8);
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
         }
 
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-
-            Toast.makeText(getApplicationContext(), "Данные успешно переданы.", Toast.LENGTH_SHORT).show();
-        }
-    }*/
+        return result;
+    }
 
 }
