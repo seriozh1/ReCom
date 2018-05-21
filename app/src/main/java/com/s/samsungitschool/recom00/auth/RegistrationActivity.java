@@ -31,7 +31,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RegistrationActivity extends AppCompatActivity {
 
     private static final String TAG = "RegistrationActivity";
-    private static final String URI_FOR_REGISTRATION = "http//171.33.253.145";
+    private static final String URI_FOR_REGISTRATION = "https://188.235.216.130:80";
+    //private static final String URI_FOR_REGISTRATION = "https://171.33.253.145";
 
     ProgressDialog progressDialog;
     AlertDialog.Builder alertDialogBuilderInput, alertDialogBuilderRegister;
@@ -44,6 +45,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private String password = "";
     private User userFromServer;
     private String serverAnsString;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,7 +100,7 @@ public class RegistrationActivity extends AppCompatActivity {
             login = loginEt.getText().toString();
             email = emailEt.getText().toString();
             password = passwordEt.getText().toString();
-            password = getHashString(password);
+            //password = getHashString(password);
 
             new RegisterAsyncTask().execute("");
         }
@@ -106,6 +108,7 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     class RegisterAsyncTask extends AsyncTask<String, String, String> {
+        boolean serverError = false;
 
         @Override
         protected String doInBackground(String... strings) {
@@ -115,7 +118,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     .build();
 
             RegisterUserService registerUserService = retrofit.create(RegisterUserService.class);
-            Call<String> call = registerUserService.register(login, email, password);
+            Call<String> call = registerUserService.register(login, password, email);
             try {
                 Response<String> userResponse = call.execute();
                 serverAnsString = userResponse.body();
@@ -142,10 +145,12 @@ public class RegistrationActivity extends AppCompatActivity {
 
             } catch (IOException e) {
                 e.printStackTrace();
-                Toast.makeText(getBaseContext(), "Ошибка сервера" + e, Toast.LENGTH_LONG).show();
+                serverError = true;
+                //Toast.makeText(getBaseContext(), "Ошибка сервера" + e, Toast.LENGTH_LONG).show();
             } catch (NullPointerException e) {
                 e.printStackTrace();
-                Toast.makeText(getBaseContext(), "Ошибка сервера" + e, Toast.LENGTH_LONG).show();
+                serverError = true;
+                //Toast.makeText(getBaseContext(), "Ошибка сервера" + e, Toast.LENGTH_LONG).show();
             }
             return null;
         }
@@ -153,6 +158,13 @@ public class RegistrationActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if (serverError) {
+                Toast.makeText(getBaseContext(), "Ошибка сервера", Toast.LENGTH_LONG).show();
+            }
         }
     }
 

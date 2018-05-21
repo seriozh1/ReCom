@@ -1,8 +1,12 @@
 package com.s.samsungitschool.recom00.interfaces;
 
-/**
- * Created by Админ on 13.05.2018.
- */
+import com.s.samsungitschool.recom00.model.User;
+
+import retrofit2.Call;
+import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 public interface EntryUserService {
+    @POST("/")
+    Call<User> enter(@Query("login") String login, @Query("password") String password);
 }
