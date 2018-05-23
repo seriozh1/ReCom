@@ -31,8 +31,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RegistrationActivity extends AppCompatActivity {
 
     private static final String TAG = "RegistrationActivity";
-    private static final String URI_FOR_REGISTRATION = "https://188.235.216.130:80";
-    //private static final String URI_FOR_REGISTRATION = "https://171.33.253.145";
+    private static final String URI_FOR_REGISTRATION = "http://188.235.216.130:80";
+    //private static final String URI_FOR_REGISTRATION = "http://171.33.253.145:8080";
+    //private static final String URI_FOR_REGISTRATION = "localhost:8080";
 
     ProgressDialog progressDialog;
     AlertDialog.Builder alertDialogBuilderInput, alertDialogBuilderRegister;
@@ -100,7 +101,7 @@ public class RegistrationActivity extends AppCompatActivity {
             login = loginEt.getText().toString();
             email = emailEt.getText().toString();
             password = passwordEt.getText().toString();
-            //password = getHashString(password);
+            password = getHashString(password);
 
             new RegisterAsyncTask().execute("");
         }
@@ -118,29 +119,39 @@ public class RegistrationActivity extends AppCompatActivity {
                     .build();
 
             RegisterUserService registerUserService = retrofit.create(RegisterUserService.class);
-            Call<String> call = registerUserService.register(login, password, email);
+            Call<String> call = registerUserService.registerUser(login, password, email);
             try {
                 Response<String> userResponse = call.execute();
                 serverAnsString = userResponse.body();
 
-                if (serverAnsString.equals("Login already registered")) {
-
-                    alertDialogBuilderRegister.setTitle("Ошибка");
-                    alertDialogBuilderRegister.setMessage("Пользователь с таким логином уже существует.");
-                    displayAlert("registration_login_error");
-                } else if (serverAnsString.equals("Email already registered")) {
-
-                    alertDialogBuilderRegister.setTitle("Ошибка");
-                    alertDialogBuilderRegister.setMessage("Пользователь с такой почтой уже существует.");
-                    displayAlert("registration_email_error");
+                if (userResponse.code() == 400 || serverAnsString != null) {
+                    alertDialogBuilderInput.setTitle("Ошибка");
+                    alertDialogBuilderInput.setMessage("Ошибка сервера");
+                    displayAlert("input_error");
                 } else {
-                    alertDialogBuilderRegister.setTitle("Успешно");
-                    alertDialogBuilderRegister.setMessage("Вы успешно прошли регистрацию.");
-                    displayAlert("registration_OK");
+                    if (serverAnsString.equals("Login already registered")) {
 
-                    Intent intent = new Intent(getApplicationContext(), EntryActivity.class);
-                    startActivity(intent);
+                        alertDialogBuilderRegister.setTitle("Ошибка");
+                        alertDialogBuilderRegister.setMessage("Пользователь с таким логином уже существует.");
+                        displayAlert("registration_login_error");
+                    } else if (serverAnsString.equals("Email already registered")) {
+
+                        alertDialogBuilderRegister.setTitle("Ошибка");
+                        alertDialogBuilderRegister.setMessage("Пользователь с такой почтой уже существует.");
+                        displayAlert("registration_email_error");
+                    } else {
+                        alertDialogBuilderRegister.setTitle("Успешно");
+                        alertDialogBuilderRegister.setMessage("Вы успешно прошли регистрацию.");
+                        displayAlert("registration_OK");
+
+
+
+                        Intent intent = new Intent(getApplicationContext(), EntryActivity.class);
+                        startActivity(intent);
+                    }
                 }
+
+
 
 
             } catch (IOException e) {

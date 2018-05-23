@@ -1,6 +1,8 @@
 package com.s.samsungitschool.recom00;
 
 import android.app.FragmentTransaction;
+import android.content.Entity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -13,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.android.gms.maps.MapFragment;
+import com.s.samsungitschool.recom00.auth.EntryActivity;
 import com.s.samsungitschool.recom00.fragments.AboutFragmentActivity;
 import com.s.samsungitschool.recom00.fragments.AchievementsFragmentActivity;
 import com.s.samsungitschool.recom00.fragments.ApplicationsFragmentActivity;
@@ -70,6 +73,11 @@ public class MainActivity extends AppCompatActivity
         this.aboutFragmentActivity = new AboutFragmentActivity();
         this.shareFragmentActivity = new ShareFragmentActivity();
         this.sendFragmentActivity = new SendFragmentActivity();
+
+        //Start work
+        Intent i = new Intent(this, EntryActivity.class);
+        startActivity(i);
+
 
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.container, this.profileFragmentActivity);

@@ -7,6 +7,6 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface RegisterUserService {
-    @POST("/")
-    Call<String> register(@Query("login") String login, @Query("password") String password, @Query("email") String email);
+    @POST("/user/register")
+    Call<String> registerUser(@Query("login") String login, @Query("password") String password, @Query("email") String email);
 }

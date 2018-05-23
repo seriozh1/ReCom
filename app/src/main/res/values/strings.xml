@@ -53,5 +53,44 @@
     <string name="Achievements">Достижения</string>
     <string name="Confirm_password">Повторите пароль</string>
     <string name="Already_register">Уже зарегистрирован</string>
+    <string name="Login">Логин</string>
+    <string name="Points">Баллы</string>
+    <string name="Rank">Звание</string>
+    <string name="Exit">Выход</string>
+    <string name="Application">Заявление</string>
+    <string name="Address">Адрес</string>
+    <string name="Type_of_problem">Тип проблемы</string>
+
+    <string-array name="problemList">
+        <item>Парковка</item>
+        <item>Яма</item>
+        <item>Знак</item>
+
+    </string-array>
+
+    <string-array name="problemParkingList">
+        <item>Парковка вторым рядом</item>
+        <item>Парковка под знаком "Остановка запрещена"</item>
+        <item>Парковка на тротуаре</item>
+        <item>Парковка на пешеходном переходе</item>
+        <item>Парковка на месте для инвалидов</item>
+    </string-array>
+
+    <string-array name="problemPitList">
+        <item>Разбитая дорога</item>
+        <item>Яма на дороге</item>
+        <item>Люк</item>
+        <item>Рельсы</item>
+        <item>Ремонт дороги</item>
+    </string-array>
+
+    <string-array name="problemSignList">
+        <item>Плохо видно знак</item>
+        <item>Упавший знак</item>
+        <item>Стертая разметка</item>
+        <item>Не видно светофор</item>
+    </string-array>
+
+
 
 </resources>

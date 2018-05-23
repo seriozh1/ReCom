@@ -14,14 +14,99 @@
         android:layout_marginTop="50sp"
         android:layout_marginBottom="50sp" />
 
-    <Button
-        android:id="@+id/bt_enter"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:textStyle="bold"
+
+            android:layout_marginStart="35sp"
+            android:layout_marginBottom="25sp"
+            android:text="@string/Login"/>
+
+        <TextView
+            android:id="@+id/login_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginStart="20sp"
+            android:textColor="@color/colorAccent"
+            android:layout_marginBottom="25sp"
+            android:text="-"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_marginStart="35sp"
+            android:layout_marginBottom="25sp"
+            android:text="@string/Points"/>
+
+        <TextView
+            android:id="@+id/points_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginStart="15sp"
+            android:textColor="@color/colorAccent"
+            android:layout_marginBottom="25sp"
+            android:text="-"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:textStyle="bold"
+
+            android:layout_marginStart="35sp"
+            android:layout_marginBottom="25sp"
+            android:text="@string/Rank"/>
+
+        <TextView
+            android:id="@+id/rank_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginStart="15sp"
+            android:textColor="@color/colorAccent"
+            android:layout_marginBottom="25sp"
+            android:text="-"/>
+
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/bt_exit"
+        android:layout_width="150sp"
+        android:layout_height="wrap_content"
+        android:textStyle="italic"
         android:background="#9a0741f2"
         android:layout_gravity="center"
-        android:textSize="30sp"
-        android:text="@string/Enter"/>
+        android:textSize="26sp"
+        android:layout_marginTop="50sp"
+        android:text="@string/Exit"/>
 
 </LinearLayout>

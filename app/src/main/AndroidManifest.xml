@@ -49,7 +49,7 @@
             android:name=".maps.MapsActivity"
             android:label="@string/title_activity_maps" />
         <activity android:name=".auth.EntryActivity" />
-        <activity android:name=".auth.RegistrationActivity"></activity>
+        <activity android:name=".auth.RegistrationActivity"/>
     </application>
 
 </manifest>
