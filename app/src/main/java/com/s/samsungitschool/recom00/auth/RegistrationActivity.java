@@ -16,6 +16,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.s.samsungitschool.recom00.R;
 import com.s.samsungitschool.recom00.interfaces.RegisterUserService;
 import com.s.samsungitschool.recom00.model.User;
@@ -113,18 +115,21 @@ public class RegistrationActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
+
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(URI_FOR_REGISTRATION)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
             RegisterUserService registerUserService = retrofit.create(RegisterUserService.class);
-            Call<String> call = registerUserService.registerUser(login, password, email);
-            try {
-                Response<String> userResponse = call.execute();
-                serverAnsString = userResponse.body();
 
-                if (userResponse.code() == 400 || serverAnsString != null) {
+            Call<Object> registerResponse = registerUserService.registerUser(login, password, email);
+            try {
+                Response response = registerResponse.execute();
+                //serverAnsString = registerResponse.body().toString();
+                serverAnsString = response.toString();
+
+                if (serverAnsString == null) {
                     alertDialogBuilderInput.setTitle("Ошибка");
                     alertDialogBuilderInput.setMessage("Ошибка сервера");
                     displayAlert("input_error");
@@ -152,16 +157,12 @@ public class RegistrationActivity extends AppCompatActivity {
                 }
 
 
-
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                serverError = true;
-                //Toast.makeText(getBaseContext(), "Ошибка сервера" + e, Toast.LENGTH_LONG).show();
             } catch (NullPointerException e) {
                 e.printStackTrace();
                 serverError = true;
                 //Toast.makeText(getBaseContext(), "Ошибка сервера" + e, Toast.LENGTH_LONG).show();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
             return null;
         }

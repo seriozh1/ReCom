@@ -72,8 +72,6 @@
         android:entries="@array/problemPitList" />
 
 
-
-
 </LinearLayout>
 
 <!--

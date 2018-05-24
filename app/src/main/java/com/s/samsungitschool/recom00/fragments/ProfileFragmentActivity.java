@@ -25,10 +25,13 @@ import static android.content.Context.MODE_PRIVATE;
 public class ProfileFragmentActivity extends Fragment implements View.OnClickListener {
 
     SharedPreferences sharedPreferences;
-    Spinner spinnerProblem, spinnerType;
 
-    Button btExit, btAddress;
+    Button btExit;
     TextView loginTv, pointsTv, rankTv;
+
+
+    private final String LOGIN = "LOGIN";
+    private final String POINTS = "POINTS";
 
     private String login = "-";
     private int points = 0;
@@ -46,49 +49,9 @@ public class ProfileFragmentActivity extends Fragment implements View.OnClickLis
         loginTv = (TextView) getView().findViewById(R.id.login_tv);
         pointsTv = (TextView) getView().findViewById(R.id.points_tv);
         rankTv = (TextView) getView().findViewById(R.id.rank_tv);
-        btAddress = (Button) getView().findViewById(R.id.address_bt);
 
-        spinnerProblem = (Spinner) getView().findViewById(R.id.spinnerProblem);
-        spinnerType = (Spinner) getView().findViewById(R.id.spinnerType);
-
-        //From other Activity
         //TODO SET LOGIN AND POINTS
-
-        //login = getIntent().getStringExtra("et");
-        //sharedPreferences = getPreferences(MODE_PRIVATE);
-
-        /*TabHost tabHost = (TabHost) getView().findViewById(R.id.tabHost);
-
-        tabHost.setup();
-
-        TabHost.TabSpec tabSpec = tabHost.newTabSpec("tag1");
-        tabSpec.setContent(R.id.tab1);
-        tabSpec.setIndicator("Кот");
-        tabHost.addTab(tabSpec);
-
-        tabSpec = tabHost.newTabSpec("tag2");
-        tabSpec.setContent(R.id.tab2);
-        tabSpec.setIndicator("Кошка");
-        tabHost.addTab(tabSpec);
-
-        tabSpec = tabHost.newTabSpec("tag3");
-        tabSpec.setContent(R.id.tab3);
-        tabSpec.setIndicator("Котёнок");
-        tabHost.addTab(tabSpec);
-
-        tabHost.setCurrentTab(0);*/
-
-        /*spinnerType.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-
-            }
-        });*/
-
-
-
+        loadLoginAndPoints();
 
 
         btExit.setOnClickListener(new View.OnClickListener() {
@@ -98,6 +61,17 @@ public class ProfileFragmentActivity extends Fragment implements View.OnClickLis
                 startActivity(entryIntent);
             }
         });
+    }
+
+    void loadLoginAndPoints() {
+        //sharedPreferences = getPreferences(MODE_PRIVATE);
+
+
+        //loginTv.setText(sharedPreferences.getString(LOGIN, ""));
+        //loginTv.setText(sharedPreferences.getString(POINTS, "0"));
+
+        //Toast.makeText(, "Date Loaded", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override

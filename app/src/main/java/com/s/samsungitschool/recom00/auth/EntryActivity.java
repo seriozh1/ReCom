@@ -29,20 +29,18 @@ public class EntryActivity extends AppCompatActivity {
 
     ProfileFragmentActivity profileFragmentActivity;
 
-    private static final String URI_FOR_REGISTRATION = "https://188.235.216.130:80";
+    private static final String URI_FOR_REGISTRATION = "http://188.235.216.130:80";
 
     AlertDialog.Builder alertDialogBuilderInput;
     private String serverAnsString = "";
 
     SharedPreferences sharedPreferences;
-    private final String LOGIN = "";
-    private final String EMAIL = "";
-    private final String POINTS = "";
+    private final String LOGIN = "LOGIN";
+    private final String POINTS = "POINTS";
 
     EditText loginEt, passwordEt;
     Button loginIn, goToRegister;
 
-    boolean authorized = false;
     private User userFromServer;
 
     @Override
@@ -61,16 +59,13 @@ public class EntryActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                while(!authorized) {
-                    if (loginEt.getText().toString().equals("") || passwordEt.getText().toString().equals("")) {
-                        alertDialogBuilderInput.setTitle("Ошибка");
-                        alertDialogBuilderInput.setMessage("Заполните все поля");
-                        displayAlert("input_error");
-                    } else {
-                        new EntryAsyncTask().execute("");
-                    }
+                if (loginEt.getText().toString().equals("") || passwordEt.getText().toString().equals("")) {
+                    alertDialogBuilderInput.setTitle("Ошибка");
+                    alertDialogBuilderInput.setMessage("Заполните все поля");
+                    displayAlert("input_error");
+                } else {
+                    new EntryAsyncTask().execute("");
                 }
-
 
             }
         });
@@ -95,23 +90,31 @@ public class EntryActivity extends AppCompatActivity {
                     .build();
 
             EntryUserService registerUserService = retrofit.create(EntryUserService.class);
-            Call<String> call = registerUserService.authenticate(loginEt.getText().toString(), passwordEt.getText().toString());
+            Call<Object> userResponse = registerUserService.authenticate(loginEt.getText().toString(), passwordEt.getText().toString());
 
             try {
-                Response<String>  userResponse = call.execute();
-                serverAnsString = userResponse.body();
+                Response response = userResponse.execute();
+                serverAnsString = response.body().toString();
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            if (serverAnsString.equals("Authentication failed")) {
-                alertDialogBuilderInput.setTitle("Ошибка авторизации");
-                alertDialogBuilderInput.setMessage("Проверьте вводимые данные и повторите попытку");
+
+            if (serverAnsString != null) {
+                alertDialogBuilderInput.setTitle("Ошибка");
+                alertDialogBuilderInput.setMessage("Ошибка сервера");
                 displayAlert("input_error");
             } else {
-                authorized = true;
-                new getUserAsyncTask().execute("");
+                if (serverAnsString.equals("Authentication failed")) {
+                    alertDialogBuilderInput.setTitle("Ошибка авторизации");
+                    alertDialogBuilderInput.setMessage("Проверьте вводимые данные и повторите попытку");
+                    displayAlert("input_error");
+                } else {
+
+                    new getUserAsyncTask().execute("");
+                }
             }
+
 
             return null;
         }
@@ -145,7 +148,6 @@ public class EntryActivity extends AppCompatActivity {
             if (userFromServer != null) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString(LOGIN, userFromServer.getLogin());
-                editor.putString(EMAIL, userFromServer.getEmail());
                 editor.putInt(POINTS, userFromServer.getPoints());
                 editor.apply();
 
@@ -179,10 +181,8 @@ public class EntryActivity extends AppCompatActivity {
             }
         });
 
-        if (code.equals("input_error")) {
-            AlertDialog alertDialog = alertDialogBuilderInput.create();
-            alertDialog.show();
-        }
+        AlertDialog alertDialog = alertDialogBuilderInput.create();
+        alertDialog.show();
 
     }
 
