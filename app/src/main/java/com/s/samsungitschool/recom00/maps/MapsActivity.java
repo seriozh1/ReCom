@@ -53,7 +53,7 @@ public class MapsActivity extends FragmentActivity implements
             @Override
             public void onMapClick(LatLng latLng) {
                 LatLng newMarker = latLng;
-                mMap.addMarker(new MarkerOptions().position(newMarker).title("Marker in Sydney"));
+                mMap.addMarker(new MarkerOptions().position(newMarker).title("Новая точка"));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(newMarker));
             }
         });

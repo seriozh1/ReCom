@@ -60,6 +60,9 @@
     <string name="Application">Заявление</string>
     <string name="Address">Адрес</string>
     <string name="Type_of_problem">Тип проблемы</string>
+    <string name="Add_photo">Добавить фото</string>
+    <string name="Comment">Комментарий</string>
+    <string name="Send">Отправить</string>
 
     <string-array name="problemList">
         <item>Парковка</item>

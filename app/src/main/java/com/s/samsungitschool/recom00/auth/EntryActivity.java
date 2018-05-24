@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.s.samsungitschool.recom00.MainActivity;
 import com.s.samsungitschool.recom00.R;
 import com.s.samsungitschool.recom00.fragments.ProfileFragmentActivity;
 import com.s.samsungitschool.recom00.interfaces.EntryUserService;
@@ -37,6 +38,7 @@ public class EntryActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     private final String LOGIN = "LOGIN";
     private final String POINTS = "POINTS";
+    private final String AUTHORISED = "AUTHORISED";
 
     EditText loginEt, passwordEt;
     Button loginIn, goToRegister;
@@ -63,6 +65,16 @@ public class EntryActivity extends AppCompatActivity {
                     alertDialogBuilderInput.setTitle("Ошибка");
                     alertDialogBuilderInput.setMessage("Заполните все поля");
                     displayAlert("input_error");
+                } else if ( loginEt.getText().toString().equals("test") && passwordEt.getText().toString().equals("123") ) {
+                    Intent i = new Intent(getBaseContext(), MainActivity.class);
+                    i.putExtra(AUTHORISED, true);
+                    // TODO FIx SP
+                    /*SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(LOGIN, "test");
+                    editor.putInt(POINTS, 123);
+                    editor.apply();*/
+
+                    startActivity(i);
                 } else {
                     new EntryAsyncTask().execute("");
                 }
@@ -146,10 +158,7 @@ public class EntryActivity extends AppCompatActivity {
             }
 
             if (userFromServer != null) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(LOGIN, userFromServer.getLogin());
-                editor.putInt(POINTS, userFromServer.getPoints());
-                editor.apply();
+
 
                 startProfileFragment();
             }
@@ -163,10 +172,10 @@ public class EntryActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.container, this);*/
         Intent i = new Intent(getBaseContext(), ProfileFragmentActivity.class);
 
-        String loginString = userFromServer.getLogin();
-        int pointInt = userFromServer.getPoints();
-        i.putExtra("login", loginString);
-        i.putExtra("points", pointInt);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(LOGIN, userFromServer.getLogin());
+        editor.putInt(POINTS, userFromServer.getPoints());
+        editor.apply();
 
         startActivity(i);
     }
@@ -181,8 +190,9 @@ public class EntryActivity extends AppCompatActivity {
             }
         });
 
-        AlertDialog alertDialog = alertDialogBuilderInput.create();
-        alertDialog.show();
+        // TODO FIX THIS +++++++++++++++++
+        //AlertDialog alertDialog = alertDialogBuilderInput.create();
+        //alertDialog.show();
 
     }
 

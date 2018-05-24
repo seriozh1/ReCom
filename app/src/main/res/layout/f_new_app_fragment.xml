@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:card_view="http://schemas.android.com/tools"
@@ -8,71 +8,227 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25sp"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20sp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_marginTop="35sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorAccent"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:text="Добавить фото"/>
+
+            <ImageButton
+                android:id="@+id/add_photo_bt"
+                android:layout_marginStart="35sp"
+                android:layout_width="100sp"
+                android:layout_height="100sp"
+                android:background="@drawable/ic_add_photo_bt"
+                android:contentDescription="@string/Add_photo" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25sp"
+            android:layout_marginBottom="25sp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/address_bt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textStyle="italic"
+                android:textColor="@color/colorAccent"
+                android:text="@string/Address"
+                android:layout_weight="3"/>
+
+            <TextView
+                android:layout_marginStart="15sp"
+                android:id="@+id/address_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/Address"
+                android:textColor="@color/colorAccent"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+
+
+        <TabHost
+            android:id="@+id/tabHost"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TabWidget
+                    android:id="@android:id/tabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <FrameLayout
+                    android:id="@android:id/tabcontent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:id="@+id/tab1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_marginTop="25sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/Type_of_problem"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="17sp"
+                            android:textStyle="italic"/>
+
+                        <Spinner
+                            android:id="@+id/spinnerProblemParking"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="25sp"
+                            android:scrollbarSize="30sp"
+                            android:textSize="28sp"
+                            android:entries="@array/problemParkingList" />
+
+                        <TextView
+                            android:layout_marginTop="25sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/Comment"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="17sp"
+                            android:textStyle="italic"/>
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:textStyle="bold"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/tab2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_marginTop="25sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/Type_of_problem"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="16sp"
+                            android:textStyle="italic"/>
+
+                        <Spinner
+                            android:id="@+id/spinnerProblemPit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="25sp"
+                            android:scrollbarSize="30sp"
+                            android:textSize="28sp"
+                            android:entries="@array/problemPitList" />
+
+                        <TextView
+                            android:layout_marginTop="25sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/Comment"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="15sp"
+                            android:textStyle="italic"/>
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:textStyle="bold"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/tab3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_marginTop="25sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/Type_of_problem"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="16sp"
+                            android:textStyle="italic"/>
+
+                        <Spinner
+                            android:id="@+id/spinnerProblemSign"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="25sp"
+                            android:scrollbarSize="30sp"
+                            android:textSize="28sp"
+                            android:entries="@array/problemSignList" />
+
+                        <TextView
+                            android:layout_marginTop="25sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/Comment"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="15sp"
+                            android:textStyle="italic"/>
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:textStyle="bold"/>
+
+                    </LinearLayout>
+                </FrameLayout>
+            </LinearLayout>
+        </TabHost>
 
         <Button
-            android:id="@+id/address_bt"
-            android:layout_width="match_parent"
+            android:id="@+id/send_bt"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="#0852ff"
             android:textSize="18sp"
             android:textStyle="italic"
-            android:textColor="@color/colorAccent"
-            android:text="@string/Address"
-            android:layout_weight="3"/>
-
-        <TextView
-            android:layout_marginStart="15sp"
-            android:id="@+id/address_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/Address"
-            android:textColor="@color/colorAccent"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:layout_weight="1"/>
+            android:layout_gravity="center"
+            style="@style/Base.Widget.AppCompat.ActionBar.Solid"
+            android:text="@string/Send"/>
 
     </LinearLayout>
 
-    <TextView
-        android:layout_marginTop="25sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/Type_of_problem"
-        android:textColor="@color/colorAccent"
-        android:textSize="20sp"
-        android:textStyle="italic"/>
-
-    <Spinner
-        android:id="@+id/spinnerProblem"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25sp"
-        android:scrollbarSize="30sp"
-        android:textSize="28sp"
-        android:entries="@array/problemList" />
-
-    <TextView
-        android:layout_marginTop="25sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/Type_of_problem"
-        android:textColor="@color/colorAccent"
-        android:textSize="20sp"
-        android:textStyle="italic"/>
-
-    <Spinner
-        android:id="@+id/spinnerType"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25sp"
-        android:scrollbarSize="30sp"
-        android:textSize="28sp"
-        android:entries="@array/problemPitList" />
-
-
-</LinearLayout>
+</ScrollView>
 
 <!--
 

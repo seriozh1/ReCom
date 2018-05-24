@@ -44,6 +44,9 @@ public class MainActivity extends AppCompatActivity
     ShareFragmentActivity shareFragmentActivity;
     SendFragmentActivity sendFragmentActivity;
 
+    boolean isAuthorised = false;
+    private final String AUTHORISED = "AUTHORISED";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,17 +77,23 @@ public class MainActivity extends AppCompatActivity
         this.shareFragmentActivity = new ShareFragmentActivity();
         this.sendFragmentActivity = new SendFragmentActivity();
 
-        //Start work
-        Intent i = new Intent(this, EntryActivity.class);
-        startActivity(i);
+        isAuthorised = getIntent().getBooleanExtra(AUTHORISED, false);
 
+        if (isAuthorised) {
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.container, this.profileFragmentActivity);
 
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.container, this.profileFragmentActivity);
+            setTitle(R.string.Profile);
+            fragmentTransaction.commit();
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            Intent i = new Intent(this, EntryActivity.class);
+            startActivity(i);
+        }
 
-        setTitle(R.string.Profile);
-        fragmentTransaction.commit();
-        drawer.closeDrawer(GravityCompat.START);
+        // TODO Finish
+        //finish();
+
     }
 
     @Override
