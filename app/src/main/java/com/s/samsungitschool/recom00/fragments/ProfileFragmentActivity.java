@@ -53,6 +53,12 @@ public class ProfileFragmentActivity extends Fragment implements View.OnClickLis
         //TODO SET LOGIN AND POINTS
         loadLoginAndPoints();
 
+        loginTv.setText(login);
+        pointsTv.setText( Integer.valueOf(points).toString() );
+
+        if (points <= 300) {
+            rankTv.setText("Домосед");
+        }
 
         btExit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,14 +70,13 @@ public class ProfileFragmentActivity extends Fragment implements View.OnClickLis
     }
 
     void loadLoginAndPoints() {
-        //sharedPreferences = getPreferences(MODE_PRIVATE);
 
+        sharedPreferences = getActivity().getSharedPreferences("SP", MODE_PRIVATE);
 
-        //loginTv.setText(sharedPreferences.getString(LOGIN, ""));
-        //loginTv.setText(sharedPreferences.getString(POINTS, "0"));
+        login = sharedPreferences.getString(LOGIN, "");
+        points = sharedPreferences.getInt(POINTS, 0);
 
-        //Toast.makeText(, "Date Loaded", Toast.LENGTH_SHORT).show();
-
+        Toast.makeText(getActivity() ,"Date Loaded", Toast.LENGTH_SHORT).show();
     }
 
     @Override

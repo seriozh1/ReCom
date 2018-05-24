@@ -38,7 +38,7 @@ public class RegistrationActivity extends AppCompatActivity {
     //private static final String URI_FOR_REGISTRATION = "localhost:8080";
 
     ProgressDialog progressDialog;
-    AlertDialog.Builder alertDialogBuilderInput, alertDialogBuilderRegister;
+    AlertDialog.Builder alertDialogBuilderInput;
 
     private EditText loginEt, emailEt, passwordEt, passwordConfirmEt;
     private Button registerBt, entryBt;
@@ -49,6 +49,8 @@ public class RegistrationActivity extends AppCompatActivity {
     private User userFromServer;
     private String serverAnsString;
 
+    boolean errorInput = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +60,6 @@ public class RegistrationActivity extends AppCompatActivity {
         progressDialog.setCancelable(false);
 
         alertDialogBuilderInput = new AlertDialog.Builder(RegistrationActivity.this);
-        alertDialogBuilderRegister = new AlertDialog.Builder(RegistrationActivity.this);
 
         loginEt = (EditText) findViewById(R.id.login_registration_et);
         passwordEt = (EditText) findViewById(R.id.password_registration_et);
@@ -93,12 +94,12 @@ public class RegistrationActivity extends AppCompatActivity {
 
             alertDialogBuilderInput.setTitle("Ошибка");
             alertDialogBuilderInput.setMessage("Заполните все поля");
-            displayAlert("input_error");
+            errorInput = true;
         } else if ( !passwordEt.getText().toString().equals(passwordConfirmEt.getText().toString())) {
 
             alertDialogBuilderInput.setTitle("Ошибка");
             alertDialogBuilderInput.setMessage("Пароли не совпадают");
-            displayAlert("input_error");
+            errorInput = true;
         } else {
             login = loginEt.getText().toString();
             email = emailEt.getText().toString();
@@ -132,22 +133,22 @@ public class RegistrationActivity extends AppCompatActivity {
                 if (serverAnsString == null) {
                     alertDialogBuilderInput.setTitle("Ошибка");
                     alertDialogBuilderInput.setMessage("Ошибка сервера");
-                    displayAlert("input_error");
+                    errorInput = true;
                 } else {
                     if (serverAnsString.equals("Login already registered")) {
 
-                        alertDialogBuilderRegister.setTitle("Ошибка");
-                        alertDialogBuilderRegister.setMessage("Пользователь с таким логином уже существует.");
-                        displayAlert("registration_login_error");
+                        alertDialogBuilderInput.setTitle("Ошибка");
+                        alertDialogBuilderInput.setMessage("Пользователь с таким логином уже существует.");
+                        errorInput = true;
                     } else if (serverAnsString.equals("Email already registered")) {
 
-                        alertDialogBuilderRegister.setTitle("Ошибка");
-                        alertDialogBuilderRegister.setMessage("Пользователь с такой почтой уже существует.");
-                        displayAlert("registration_email_error");
+                        alertDialogBuilderInput.setTitle("Ошибка");
+                        alertDialogBuilderInput.setMessage("Пользователь с такой почтой уже существует.");
+                        errorInput = true;
                     } else {
-                        alertDialogBuilderRegister.setTitle("Успешно");
-                        alertDialogBuilderRegister.setMessage("Вы успешно прошли регистрацию.");
-                        displayAlert("registration_OK");
+                        alertDialogBuilderInput.setTitle("Успешно");
+                        alertDialogBuilderInput.setMessage("Вы успешно прошли регистрацию.");
+                        errorInput = true;
 
 
 
@@ -169,6 +170,9 @@ public class RegistrationActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
+            if (errorInput) {
+                displayAlert("input_error");
+            }
             super.onPreExecute();
         }
 
@@ -210,7 +214,7 @@ public class RegistrationActivity extends AppCompatActivity {
         } else if (code.equals("registration_login_error")
                 || code.equals("registration_email_error")
                 || code.equals("registration_OK")) {
-            AlertDialog alertDialog = alertDialogBuilderRegister.create();
+            AlertDialog alertDialog = alertDialogBuilderInput.create();
             alertDialog.show();
         }
 

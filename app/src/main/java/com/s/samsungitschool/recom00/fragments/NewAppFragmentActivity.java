@@ -2,8 +2,10 @@ package com.s.samsungitschool.recom00.fragments;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,7 @@ import android.widget.TabHost;
 
 import com.google.android.gms.maps.MapFragment;
 import com.s.samsungitschool.recom00.R;
+import com.s.samsungitschool.recom00.maps.MapsActivity;
 
 public class NewAppFragmentActivity extends Fragment {
 
@@ -62,16 +65,16 @@ public class NewAppFragmentActivity extends Fragment {
 
         tabHost.setCurrentTab(0);
 
-
+        final Intent i = new Intent( getActivity(), MapsActivity.class);
 
         // TODO Open Map
-        /*btAddress.setOnClickListener(new View.OnClickListener() {
+        btAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getView(), MapsActivity.class);
+
                 startActivity(i);
             }
-        });*/
+        });
 
 
         super.onActivityCreated(savedInstanceState);

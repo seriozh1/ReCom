@@ -1,10 +1,19 @@
 package com.s.samsungitschool.recom00.maps;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -15,6 +24,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.s.samsungitschool.recom00.R;
+import com.s.samsungitschool.recom00.fragments.NewAppFragmentActivity;
 
 public class MapsActivity extends FragmentActivity implements
         GoogleMap.OnMyLocationButtonClickListener,
@@ -22,10 +32,13 @@ public class MapsActivity extends FragmentActivity implements
         OnMapReadyCallback,
         ActivityCompat.OnRequestPermissionsResultCallback {
 
-
     private GoogleMap mMap;
     private boolean mLocationPermissionGranted;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+
+    AlertDialog.Builder ad;
+    Context context;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +48,8 @@ public class MapsActivity extends FragmentActivity implements
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        context = MapsActivity.this;
 
     }
 
@@ -49,16 +64,111 @@ public class MapsActivity extends FragmentActivity implements
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));*/
 
+        Log.i("onMapReady ", "onMapReady");
+
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+
             @Override
             public void onMapClick(LatLng latLng) {
+                Log.i("onMapClick ", "onMapClick");
                 LatLng newMarker = latLng;
                 mMap.addMarker(new MarkerOptions().position(newMarker).title("Новая точка"));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(newMarker));
+
+
+                String title = "Новая точка";
+                String message = "Добавить новую проблемную точку?";
+                String button1String = "Да";
+                String button2String = "Нет";
+
+                ad = new AlertDialog.Builder(context);
+                ad.setTitle(title);  // заголовок
+                ad.setMessage(message); // сообщение
+                ad.setPositiveButton(button1String, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int arg1) {
+                        Toast.makeText(context, "Перенаправление",
+                                Toast.LENGTH_LONG).show();
+
+                        Intent i = new Intent(getBaseContext(), NewAppFragmentActivity.class);
+                        startActivity(i);
+                    }
+                });
+                ad.setNegativeButton(button2String, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int arg1) {
+                        Toast.makeText(context, "Отмена", Toast.LENGTH_LONG)
+                                .show();
+
+
+                    }
+                });
+                ad.setCancelable(true);
+                ad.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    public void onCancel(DialogInterface dialog) {
+                        Toast.makeText(context, "Вы ничего не выбрали",
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+                ad.show();
+
+
             }
         });
 
     }
+
+    /*
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        mLocationPermissionGranted = false;
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+        // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] ==
+
+                        PackageManager.PERMISSION_GRANTED) {
+
+                    mLocationPermissionGranted = true;
+                }
+            }
+        }
+        updateLocationUI();
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    private void updateLocationUI() {
+        if (mMap == null) {
+            return;
+        }
+        try {
+            if (mLocationPermissionGranted) {
+                mMap.setMyLocationEnabled(true);
+                mMap.getUiSettings().setMyLocationButtonEnabled(true);
+            } else {
+                mMap.setMyLocationEnabled(false);
+                mMap.getUiSettings().setMyLocationButtonEnabled(false);
+                mLastKnownLocation = null;
+                getLocationPermission();
+            }
+        } catch (SecurityException e) {
+            Log.e("Exception: %s", e.getMessage());
+        }
+    }
+
+    private void getDeviceLocation() {
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            mLocationPermissionGranted = true;
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+
+        }
+    }*/
 
 
     @Override

@@ -8,10 +8,12 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.gson.stream.MalformedJsonException;
 import com.s.samsungitschool.recom00.MainActivity;
 import com.s.samsungitschool.recom00.R;
 import com.s.samsungitschool.recom00.fragments.ProfileFragmentActivity;
@@ -36,6 +38,8 @@ public class EntryActivity extends AppCompatActivity {
     private String serverAnsString = "";
 
     SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+
     private final String LOGIN = "LOGIN";
     private final String POINTS = "POINTS";
     private final String AUTHORISED = "AUTHORISED";
@@ -44,11 +48,14 @@ public class EntryActivity extends AppCompatActivity {
     Button loginIn, goToRegister;
 
     private User userFromServer;
+    boolean errorInput = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entry);
+
+
 
         loginEt = (EditText) findViewById(R.id.login_et);
         passwordEt = (EditText) findViewById(R.id.password_et);
@@ -69,10 +76,11 @@ public class EntryActivity extends AppCompatActivity {
                     Intent i = new Intent(getBaseContext(), MainActivity.class);
                     i.putExtra(AUTHORISED, true);
                     // TODO FIx SP
-                    /*SharedPreferences.Editor editor = sharedPreferences.edit();
+                    sharedPreferences = getSharedPreferences("SP", MODE_PRIVATE);
+                    editor = sharedPreferences.edit();
                     editor.putString(LOGIN, "test");
                     editor.putInt(POINTS, 123);
-                    editor.apply();*/
+                    editor.apply();
 
                     startActivity(i);
                 } else {
@@ -106,7 +114,11 @@ public class EntryActivity extends AppCompatActivity {
 
             try {
                 Response response = userResponse.execute();
-                serverAnsString = response.body().toString();
+
+                serverAnsString = response.toString();
+            } catch (MalformedJsonException e) {
+                e.printStackTrace();
+                Log.i("MalformedJsonException ", e.getMessage());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -115,12 +127,12 @@ public class EntryActivity extends AppCompatActivity {
             if (serverAnsString != null) {
                 alertDialogBuilderInput.setTitle("Ошибка");
                 alertDialogBuilderInput.setMessage("Ошибка сервера");
-                displayAlert("input_error");
+                errorInput = true;
             } else {
                 if (serverAnsString.equals("Authentication failed")) {
                     alertDialogBuilderInput.setTitle("Ошибка авторизации");
                     alertDialogBuilderInput.setMessage("Проверьте вводимые данные и повторите попытку");
-                    displayAlert("input_error");
+                    errorInput = true;
                 } else {
 
                     new getUserAsyncTask().execute("");
@@ -134,6 +146,11 @@ public class EntryActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+
+            if (errorInput) {
+                displayAlert("input_error");
+            }
+
         }
     }
 
@@ -190,9 +207,8 @@ public class EntryActivity extends AppCompatActivity {
             }
         });
 
-        // TODO FIX THIS +++++++++++++++++
-        //AlertDialog alertDialog = alertDialogBuilderInput.create();
-        //alertDialog.show();
+        AlertDialog alertDialog = alertDialogBuilderInput.create();
+        alertDialog.show();
 
     }
 
