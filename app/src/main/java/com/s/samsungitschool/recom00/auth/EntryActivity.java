@@ -76,6 +76,7 @@ public class EntryActivity extends AppCompatActivity {
                     Intent i = new Intent(getBaseContext(), MainActivity.class);
                     i.putExtra(AUTHORISED, true);
                     // TODO FIx SP
+
                     sharedPreferences = getSharedPreferences("SP", MODE_PRIVATE);
                     editor = sharedPreferences.edit();
                     editor.putString(LOGIN, "test");
