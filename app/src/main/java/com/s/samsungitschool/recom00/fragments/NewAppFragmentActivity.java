@@ -2,6 +2,7 @@ package com.s.samsungitschool.recom00.fragments;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,6 +30,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.MalformedJsonException;
 import com.s.samsungitschool.recom00.R;
+import com.s.samsungitschool.recom00.interfaces.CityService;
 import com.s.samsungitschool.recom00.interfaces.EntryUserService;
 import com.s.samsungitschool.recom00.interfaces.MapService;
 import com.s.samsungitschool.recom00.maps.MapsActivity;
@@ -46,6 +48,9 @@ import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 
 public class NewAppFragmentActivity extends Fragment {
+
+    AlertDialog.Builder ad;
+    Context context;
 
     ProblemPoint pointFromServer;
 
@@ -72,7 +77,9 @@ public class NewAppFragmentActivity extends Fragment {
 
     private String addPointServerAns = "";
     private String addNoteServerAns = "";
+    private String sendComplaintServerAns = "";
     boolean serverError = false;
+    boolean loadSuccessfully = true;
     boolean sendSuccessfully = true;
 
     private String authString = "";
@@ -86,6 +93,8 @@ public class NewAppFragmentActivity extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        context = getActivity();
 
         addressBT = (Button) getView().findViewById(R.id.address_bt);
         sendBT = (Button) getView().findViewById(R.id.send_bt);
@@ -145,11 +154,17 @@ public class NewAppFragmentActivity extends Fragment {
                     alertDialogBuilderInput.setTitle("Ошибка");
                     alertDialogBuilderInput.setMessage("Вы не авторизовались");
                     serverError = true;
-                    sendSuccessfully = false;
+                    loadSuccessfully = false;
                 }
 
-                if (sendSuccessfully) {
-                    Toast.makeText(getActivity(), "Данные успешно отправлены", Toast.LENGTH_LONG).show();
+                if (loadSuccessfully) {
+                    Toast.makeText(getActivity(), "Данные успешно загружены на сервер", Toast.LENGTH_LONG).show();
+
+                    // ============= Send complaint =============
+                    new sendComplaintAsyncTask().execute("");
+                    if (sendSuccessfully) {
+                        Toast.makeText(getActivity(), "Жалоба успешно отправлена", Toast.LENGTH_LONG).show();
+                    }
                 }
 
             }
@@ -207,13 +222,13 @@ public class NewAppFragmentActivity extends Fragment {
                         alertDialogBuilderInput.setTitle("Ошибка");
                         alertDialogBuilderInput.setMessage("Вы не авторизовались");
                         serverError = true;
-                        sendSuccessfully = false;
+                        loadSuccessfully = false;
 
                     } else if (addPointServerAns.equals("0")) {
                         alertDialogBuilderInput.setTitle("Ошибка");
                         alertDialogBuilderInput.setMessage("Ошибка сервера");
                         serverError = true;
-                        sendSuccessfully = false;
+                        loadSuccessfully = false;
 
                     }
                 }
@@ -260,20 +275,20 @@ public class NewAppFragmentActivity extends Fragment {
                 e.printStackTrace();
             }
 
-            if (addPointServerAns != null ) {
+            if (addPointServerAns != null) {
                 if (!addPointServerAns.equals("")) {
 
                     if (addPointServerAns.equals("User not authorized")) {
                         alertDialogBuilderInput.setTitle("Ошибка");
                         alertDialogBuilderInput.setMessage("Вы не авторизовались");
                         serverError = true;
-                        sendSuccessfully = false;
+                        loadSuccessfully = false;
 
                     } else if (addPointServerAns.equals("0")) {
                         alertDialogBuilderInput.setTitle("Ошибка");
                         alertDialogBuilderInput.setMessage("Ошибка сервера");
                         serverError = true;
-                        sendSuccessfully = false;
+                        loadSuccessfully = false;
 
                     }
                 }
@@ -281,6 +296,7 @@ public class NewAppFragmentActivity extends Fragment {
 
             return null;
         }
+
 
         @Override
         protected void onPostExecute(String s) {
@@ -320,26 +336,26 @@ public class NewAppFragmentActivity extends Fragment {
                 e.printStackTrace();
             }
 
-            if (addNoteServerAns != null ) {
+            if (addNoteServerAns != null) {
                 if (!addNoteServerAns.equals("")) {
 
                     if (addNoteServerAns.equals("User not authorized")) {
                         alertDialogBuilderInput.setTitle("Ошибка");
                         alertDialogBuilderInput.setMessage("Вы не авторизовались");
                         serverError = true;
-                        sendSuccessfully = false;
+                        loadSuccessfully = false;
 
                     } else if (addNoteServerAns.equals("Point do not exist")) {
                         alertDialogBuilderInput.setTitle("Ошибка");
                         alertDialogBuilderInput.setMessage("Точка не добавлена");
                         serverError = true;
-                        sendSuccessfully = false;
+                        loadSuccessfully = false;
 
                     } else if (addNoteServerAns.equals("Note already exists")) {
                         alertDialogBuilderInput.setTitle("Ошибка");
                         alertDialogBuilderInput.setMessage("Запись уже существует");
                         serverError = true;
-                        sendSuccessfully = false;
+                        loadSuccessfully = false;
 
                     }
                 }
@@ -347,6 +363,75 @@ public class NewAppFragmentActivity extends Fragment {
 
             return null;
         }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if (serverError) {
+                displayAlert("server_error");
+            }
+
+        }
+    }
+
+        // ================= Send Complaint =================
+
+        class sendComplaintAsyncTask extends AsyncTask<String, String, String> {
+
+            @Override
+            protected String doInBackground(String... strings) {
+
+                Gson gson = new GsonBuilder()
+                        .setLenient()
+                        .create();
+
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(URI_FOR_REGISTRATION)
+                        .addConverterFactory(GsonConverterFactory.create(gson))
+                        .build();
+
+                CityService mapService = retrofit.create(CityService.class);
+                Call<Object> call = mapService.sendComplaint(authString, pointFromServer.getId());
+
+                Response response = null;
+                try {
+                    response = call.execute();
+                    sendComplaintServerAns = response.toString();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                if (sendComplaintServerAns != null) {
+                    if (!sendComplaintServerAns.equals("")) {
+
+                        if (sendComplaintServerAns.equals("User not authorized")) {
+                            alertDialogBuilderInput.setTitle("Ошибка");
+                            alertDialogBuilderInput.setMessage("Вы не авторизовались");
+                            serverError = true;
+                            sendSuccessfully = false;
+
+                        } else if (sendComplaintServerAns.equals("Point not found")) {
+                            alertDialogBuilderInput.setTitle("Ошибка");
+                            alertDialogBuilderInput.setMessage("Точка не найдена");
+                            serverError = true;
+                            sendSuccessfully = false;
+
+                        } else if (sendComplaintServerAns.equals("Note already exists")) {
+                            alertDialogBuilderInput.setTitle("Ошибка");
+                            alertDialogBuilderInput.setMessage("Запись уже существует");
+                            serverError = true;
+                            sendSuccessfully = false;
+
+                        }
+                    }
+                }
+
+                return null;
+            }
+
+            // ================================================================
 
         @Override
         protected void onPostExecute(String s) {
