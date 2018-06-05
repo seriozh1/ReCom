@@ -105,7 +105,7 @@ public class RegistrationActivity extends AppCompatActivity {
             login = loginEt.getText().toString();
             email = emailEt.getText().toString();
             password = passwordEt.getText().toString();
-            password = getHashString(password);
+            //password = getHashString(password);
 
             new RegisterAsyncTask().execute("");
         }
@@ -118,9 +118,13 @@ public class RegistrationActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
 
+            Gson gson = new GsonBuilder()
+                    .setLenient()
+                    .create();
+
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(URI_FOR_REGISTRATION)
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();
 
             RegisterUserService registerUserService = retrofit.create(RegisterUserService.class);
@@ -129,9 +133,10 @@ public class RegistrationActivity extends AppCompatActivity {
             try {
                 Response response = registerResponse.execute();
                 //serverAnsString = registerResponse.body().toString();
+
                 serverAnsString = response.toString();
 
-                if (serverAnsString == null) {
+                if (serverAnsString == null || serverAnsString.equals("")) {
                     alertDialogBuilderInput.setTitle("Ошибка");
                     alertDialogBuilderInput.setMessage("Ошибка сервера");
                     errorInput = true;
@@ -146,15 +151,18 @@ public class RegistrationActivity extends AppCompatActivity {
                         alertDialogBuilderInput.setTitle("Ошибка");
                         alertDialogBuilderInput.setMessage("Пользователь с такой почтой уже существует.");
                         errorInput = true;
-                    } else {
+                    } else if (serverAnsString.equals("User registered")){
                         alertDialogBuilderInput.setTitle("Успешно");
                         alertDialogBuilderInput.setMessage("Вы успешно прошли регистрацию.");
                         errorInput = true;
 
 
-
                         Intent intent = new Intent(getApplicationContext(), EntryActivity.class);
                         startActivity(intent);
+                    } else {
+                        alertDialogBuilderInput.setTitle("Ошибка");
+                        alertDialogBuilderInput.setMessage("Ошибка регистрации");
+                        errorInput = true;
                     }
                 }
 
@@ -183,6 +191,9 @@ public class RegistrationActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
+            if (errorInput) {
+                displayAlert("input_error");
+            }
             if (serverError) {
                 Toast.makeText(getBaseContext(), "Ошибка сервера", Toast.LENGTH_LONG).show();
             }
@@ -213,15 +224,8 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         });
 
-        if (code.equals("input_error")) {
-            AlertDialog alertDialog = alertDialogBuilderInput.create();
-            alertDialog.show();
-        } else if (code.equals("registration_login_error")
-                || code.equals("registration_email_error")
-                || code.equals("registration_OK")) {
-            AlertDialog alertDialog = alertDialogBuilderInput.create();
-            alertDialog.show();
-        }
+        AlertDialog alertDialog = alertDialogBuilderInput.create();
+        alertDialog.show();
 
     }
 

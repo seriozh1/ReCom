@@ -38,6 +38,7 @@ public class EntryActivity extends AppCompatActivity {
 
     AlertDialog.Builder alertDialogBuilderInput;
     private String authString = "";
+    private String registerString = "";
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
@@ -174,9 +175,13 @@ public class EntryActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
 
+            Gson gson = new GsonBuilder()
+                    .setLenient()
+                    .create();
+
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(URI_FOR_REGISTRATION)
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();
 
             EntryUserService registerUserService = retrofit.create(EntryUserService.class);
@@ -184,7 +189,22 @@ public class EntryActivity extends AppCompatActivity {
 
             try {
                 Response<User> userResponse = call.execute();
-                userFromServer = userResponse.body();
+                registerString = userResponse.toString();
+                if (registerString.equals("Error")) {
+
+                    alertDialogBuilderInput.setTitle("Ошибка");
+                    alertDialogBuilderInput.setMessage("Ошибка сервера");
+                    errorInput = true;
+                } else if (registerString.equals("User does not exists")) {
+
+                    alertDialogBuilderInput.setTitle("Ошибка");
+                    alertDialogBuilderInput.setMessage("Данный пользователь не существует");
+                    errorInput = true;
+                } else {
+                    //TODO FIX !!!!!!!!!!!!!!!!
+                    userFromServer = (User) userResponse.body();
+                }
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

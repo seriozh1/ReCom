@@ -38,8 +38,13 @@ public class MapsActivity extends FragmentActivity implements
     private boolean mLocationPermissionGranted;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+
     private final String NEW_POINT_LAT = "NEW_POINT_LAT";
     private final String NEW_POINT_LNG = "NEW_POINT_LNG";
+    private final String START_ACTIVITY = "START_ACTIVITY";
+    private final String GET_ADDRESS_FROM_MAP = "GET_ADDRESS_FROM_MAP";
 
     AlertDialog.Builder ad;
     Context context;
@@ -70,7 +75,7 @@ public class MapsActivity extends FragmentActivity implements
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(55.973965, 92.848575), 10));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(56.012029, 92.871278), 12));
 
 
 
@@ -107,15 +112,17 @@ public class MapsActivity extends FragmentActivity implements
                         Toast.makeText(context, "Перенаправление",
                                 Toast.LENGTH_LONG).show();
 
-                        Intent i = new Intent(getBaseContext(), NewAppFragmentActivity.class);
 
                         newPointLat = latLng.latitude;
                         newPointLng = latLng.longitude;
 
-                        i.putExtra(NEW_POINT_LAT, newPointLat);
-                        i.putExtra(NEW_POINT_LNG, newPointLng);
-                        setResult(RESULT_OK, i);
-                        startActivity(i);
+                        sharedPreferences = getSharedPreferences("SP", MODE_PRIVATE);
+                        editor = sharedPreferences.edit();
+                        editor.putFloat(NEW_POINT_LAT, (float) newPointLat);
+                        editor.putFloat(NEW_POINT_LNG, (float) newPointLng);
+                        editor.putBoolean(GET_ADDRESS_FROM_MAP, true);
+                        editor.apply();
+
                         finish();
                     }
                 });

@@ -87,21 +87,6 @@
                             android:textSize="28sp"
                             android:entries="@array/problemParkingList" />
 
-                        <TextView
-                            android:layout_marginTop="25sp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/Comment"
-                            android:textColor="@color/colorAccent"
-                            android:textSize="17sp"
-                            android:textStyle="italic"/>
-
-                        <EditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="12sp"
-                            android:textStyle="bold"/>
-
                     </LinearLayout>
 
                     <LinearLayout
@@ -127,21 +112,6 @@
                             android:scrollbarSize="30sp"
                             android:textSize="28sp"
                             android:entries="@array/problemPitList" />
-
-                        <TextView
-                            android:layout_marginTop="25sp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/Comment"
-                            android:textColor="@color/colorAccent"
-                            android:textSize="15sp"
-                            android:textStyle="italic"/>
-
-                        <EditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="12sp"
-                            android:textStyle="bold"/>
 
                     </LinearLayout>
 
@@ -169,26 +139,27 @@
                             android:textSize="28sp"
                             android:entries="@array/problemSignList" />
 
-                        <TextView
-                            android:layout_marginTop="25sp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/Comment"
-                            android:textColor="@color/colorAccent"
-                            android:textSize="15sp"
-                            android:textStyle="italic"/>
-
-                        <EditText
-                            android:id="@+id/comment_et"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="12sp"
-                            android:textStyle="bold"/>
 
                     </LinearLayout>
                 </FrameLayout>
             </LinearLayout>
         </TabHost>
+
+        <TextView
+            android:layout_marginTop="25sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/Comment"
+            android:textColor="@color/colorAccent"
+            android:textSize="17sp"
+            android:textStyle="italic"/>
+
+        <EditText
+            android:id="@+id/comment_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
 
         <Button
             android:id="@+id/send_bt"

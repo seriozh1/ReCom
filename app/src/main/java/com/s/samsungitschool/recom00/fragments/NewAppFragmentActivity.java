@@ -52,6 +52,8 @@ public class NewAppFragmentActivity extends Fragment {
     AlertDialog.Builder ad;
     Context context;
 
+    String tabSelected = "";
+
     ProblemPoint pointFromServer;
 
     private static final String URI_FOR_REGISTRATION = "http://188.235.192.155:80";
@@ -71,6 +73,7 @@ public class NewAppFragmentActivity extends Fragment {
     private final String NEW_POINT_LAT = "NEW_POINT_LAT";
     private final String NEW_POINT_LNG = "NEW_POINT_LNG";
     private final String AUTH_STRING = "AUTH_STRING";
+    private final String GET_ADDRESS_FROM_MAP = "GET_ADDRESS_FROM_MAP";
 
     private double newPointLat;
     private double newPointLng;
@@ -78,9 +81,12 @@ public class NewAppFragmentActivity extends Fragment {
     private String addPointServerAns = "";
     private String addNoteServerAns = "";
     private String sendComplaintServerAns = "";
+
     boolean serverError = false;
     boolean loadSuccessfully = true;
     boolean sendSuccessfully = true;
+    boolean getAddressFromMap = false;
+
 
     private String authString = "";
 
@@ -127,13 +133,48 @@ public class NewAppFragmentActivity extends Fragment {
 
         tabHost.setCurrentTab(0);
 
-        final Intent i = new Intent( getActivity(), MapsActivity.class);
+        tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String tabId) {
+                tabSelected = tabId;
+            }
+        });
 
         addressBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                startActivityForResult(i, 1);
+                Intent i = new Intent( getActivity(), MapsActivity.class);
+                startActivity(i);
+
+                String tempString = "";
+
+                /*while (!getAddressFromMap) {
+                    sharedPreferences = getActivity().getSharedPreferences("SP", MODE_PRIVATE);
+
+                    getAddressFromMap = sharedPreferences.getBoolean(GET_ADDRESS_FROM_MAP, false);
+
+                    newPointLat = (double) sharedPreferences.getFloat(NEW_POINT_LAT, 0);
+                    newPointLng = (double) sharedPreferences.getFloat(NEW_POINT_LNG, 0);
+
+                    String newPointLatString = Double.toString(newPointLat);
+                    String newPointLngString = Double.toString(newPointLng);
+
+                    if (newPointLatString.length() > 5) {
+                        if (newPointLngString.length() > 5) {
+                            tempString = newPointLatString.substring(0, 5) + " " + newPointLngString.substring(0, 5);
+                        } else {
+                            tempString = newPointLatString.substring(0, 5) + " " + newPointLngString;
+                        }
+                    } else {
+                        tempString = newPointLatString + " " + newPointLngString;
+                    }
+                }*/
+
+
+
+                //TODO FIX THIS
+                //addressTV.setText("   Выбран  ");
             }
         });
 
@@ -144,11 +185,24 @@ public class NewAppFragmentActivity extends Fragment {
                 sharedPreferences = getActivity().getSharedPreferences("SP", MODE_PRIVATE);
 
                 authString = sharedPreferences.getString(AUTH_STRING, "");
-                if (!authString.equals("")) {
+                getAddressFromMap = sharedPreferences.getBoolean(GET_ADDRESS_FROM_MAP, false);
 
-                    new addPointAsyncTask().execute("");
-                    new getPointAsyncTask().execute("");
-                    new addNoteAsyncTask().execute("");
+                if (!authString.equals("")) {
+                    //TODO Fix alertDialog
+                    if (!getAddressFromMap) {
+                        alertDialogBuilderInput.setTitle("Ошибка");
+                        alertDialogBuilderInput.setMessage("Не выбран адресс");
+                        serverError = true;
+                        loadSuccessfully = false;
+                    } else {
+                        sharedPreferences = getActivity().getSharedPreferences("SP", MODE_PRIVATE);
+                        newPointLat = (double) sharedPreferences.getFloat(NEW_POINT_LAT, 0);
+                        newPointLng = (double) sharedPreferences.getFloat(NEW_POINT_LNG, 0);
+
+                        new addPointAsyncTask().execute("");
+                        new getPointAsyncTask().execute("");
+                        new addNoteAsyncTask().execute("");
+                    }
 
                 } else {
                     alertDialogBuilderInput.setTitle("Ошибка");
@@ -174,7 +228,7 @@ public class NewAppFragmentActivity extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
-    @Override
+    /*@Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (resultCode) {
             case RESULT_OK:
@@ -185,7 +239,7 @@ public class NewAppFragmentActivity extends Fragment {
                 addressTV.setText(tempString);
                 break;
         }
-    }
+    }*/
 
     // ================= add Point =================
 
@@ -315,6 +369,20 @@ public class NewAppFragmentActivity extends Fragment {
         @Override
         protected String doInBackground(String... strings) {
 
+            // ======== Message ========
+            String messageToSend = commentET.toString();
+
+            String typeOfProblem = "";
+            if (tabSelected.equals("tab1")) {
+                typeOfProblem = spinnerParking.getSelectedItem().toString();
+            } else if (tabSelected.equals("tab2")) {
+                typeOfProblem = spinnerPit.getSelectedItem().toString();
+            } else if (tabSelected.equals("tab3")) {
+                typeOfProblem = spinnerSign.getSelectedItem().toString();
+            }
+
+            messageToSend += typeOfProblem + "\n";
+            // =========================
             Gson gson = new GsonBuilder()
                     .setLenient()
                     .create();
@@ -325,7 +393,7 @@ public class NewAppFragmentActivity extends Fragment {
                     .build();
 
             MapService mapService = retrofit.create(MapService.class);
-            Call<Object> call = mapService.addNote(authString, pointFromServer.getId(), commentET.toString());
+            Call<Object> call = mapService.addNote(authString, pointFromServer.getId(), messageToSend);
 
             Response response = null;
             try {
