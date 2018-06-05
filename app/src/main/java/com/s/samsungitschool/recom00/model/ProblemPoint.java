@@ -1,41 +1,75 @@
 package com.s.samsungitschool.recom00.model;
 
 
+import java.util.Date;
+
 public class ProblemPoint {
-    String lat, lng;
-    int quantity;
 
-    public ProblemPoint() {
+    private long id;
+    private double latitude;
+    private double longitude;
+    private int rating;
+    private int quantity;
+    private Date creationDate;
+
+    public ProblemPoint(double latitude, double longitude) {
+        this(latitude, longitude, 0);
+    }
+
+    private ProblemPoint(double latitude, double longitude, int rating) {
+
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.rating = rating;
+        this.creationDate = new Date();
 
     }
 
-    public ProblemPoint(String lat, String lng, int quantity) {
-        this.lat = lat;
-        this.lng = lng;
-        this.quantity = quantity;
+    public long getId() {
+        return id;
     }
 
-    public String getLat() {
-        return lat;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public String getLng() {
-        return lng;
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public int getRating() {
+        return rating;
     }
 
     public int getQuantity() {
         return quantity;
     }
 
-    public void setLat(String lat) {
-        this.lat = lat;
+    public Date getCreationDate() {
+        return creationDate;
     }
 
-    public void setLng(String lng) {
-        this.lng = lng;
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 }

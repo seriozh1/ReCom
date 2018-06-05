@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import com.s.samsungitschool.recom00.R;
 import com.s.samsungitschool.recom00.interfaces.EntryUserService;
 import com.s.samsungitschool.recom00.interfaces.MapService;
 import com.s.samsungitschool.recom00.maps.MapsActivity;
+import com.s.samsungitschool.recom00.model.ProblemPoint;
 import com.s.samsungitschool.recom00.model.User;
 
 import java.io.IOException;
@@ -44,6 +46,8 @@ import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 
 public class NewAppFragmentActivity extends Fragment {
+
+    ProblemPoint pointFromServer;
 
     private static final String URI_FOR_REGISTRATION = "http://188.235.192.155:80";
 
@@ -134,6 +138,7 @@ public class NewAppFragmentActivity extends Fragment {
                 if (!authString.equals("")) {
 
                     new addPointAsyncTask().execute("");
+                    new getPointAsyncTask().execute("");
                     new addNoteAsyncTask().execute("");
 
                 } else {
@@ -166,6 +171,8 @@ public class NewAppFragmentActivity extends Fragment {
                 break;
         }
     }
+
+    // ================= add Point =================
 
     class addPointAsyncTask extends AsyncTask<String, String, String> {
 
@@ -226,6 +233,67 @@ public class NewAppFragmentActivity extends Fragment {
         }
     }
 
+    // ================= get Point =================
+
+    class getPointAsyncTask extends AsyncTask<String, String, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            Gson gson = new GsonBuilder()
+                    .setLenient()
+                    .create();
+
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(URI_FOR_REGISTRATION)
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .build();
+
+            MapService mapService = retrofit.create(MapService.class);
+            Call<ProblemPoint> call = mapService.getPointByLatAndLong(authString, newPointLat, newPointLng);
+
+            try {
+                Response<ProblemPoint> response = call.execute();
+                pointFromServer = response.body();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (addPointServerAns != null ) {
+                if (!addPointServerAns.equals("")) {
+
+                    if (addPointServerAns.equals("User not authorized")) {
+                        alertDialogBuilderInput.setTitle("Ошибка");
+                        alertDialogBuilderInput.setMessage("Вы не авторизовались");
+                        serverError = true;
+                        sendSuccessfully = false;
+
+                    } else if (addPointServerAns.equals("0")) {
+                        alertDialogBuilderInput.setTitle("Ошибка");
+                        alertDialogBuilderInput.setMessage("Ошибка сервера");
+                        serverError = true;
+                        sendSuccessfully = false;
+
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if (serverError) {
+                displayAlert("server_error");
+            }
+
+        }
+    }
+    // ================= add Note =================
+
     class addNoteAsyncTask extends AsyncTask<String, String, String> {
 
         @Override
@@ -241,7 +309,7 @@ public class NewAppFragmentActivity extends Fragment {
                     .build();
 
             MapService mapService = retrofit.create(MapService.class);
-            /*Call<Object> call = mapService.addNote(authString, newPointLat, commentET.toString());
+            Call<Object> call = mapService.addNote(authString, pointFromServer.getId(), commentET.toString());
 
             Response response = null;
             try {
@@ -275,7 +343,7 @@ public class NewAppFragmentActivity extends Fragment {
 
                     }
                 }
-            }*/
+            }
 
             return null;
         }
