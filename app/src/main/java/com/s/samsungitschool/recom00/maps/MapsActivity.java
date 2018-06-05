@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.annotation.NonNull;
@@ -22,6 +23,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.s.samsungitschool.recom00.R;
 import com.s.samsungitschool.recom00.fragments.NewAppFragmentActivity;
@@ -36,8 +38,16 @@ public class MapsActivity extends FragmentActivity implements
     private boolean mLocationPermissionGranted;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
+    private final String NEW_POINT_LAT = "NEW_POINT_LAT";
+    private final String NEW_POINT_LNG = "NEW_POINT_LNG";
+
     AlertDialog.Builder ad;
     Context context;
+
+    private double newPointLat;
+    private double newPointLng;
+
+    Marker newPointMarker;
 
 
     @Override
@@ -51,12 +61,18 @@ public class MapsActivity extends FragmentActivity implements
 
         context = MapsActivity.this;
 
+
+
     }
 
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(55.973965, 92.848575), 10));
+
+
 
         // Add a marker in Sydney and move the camera
         /*
@@ -69,11 +85,13 @@ public class MapsActivity extends FragmentActivity implements
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
             @Override
-            public void onMapClick(LatLng latLng) {
+            public void onMapClick(final LatLng latLng) {
                 Log.i("onMapClick ", "onMapClick");
-                LatLng newMarker = latLng;
-                mMap.addMarker(new MarkerOptions().position(newMarker).title("Новая точка"));
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(newMarker));
+                LatLng latLngMarker = latLng;
+
+                newPointMarker = mMap.addMarker(new MarkerOptions().position(latLngMarker).title("Новая точка"));
+                mMap.addMarker(new MarkerOptions().position(latLngMarker).title("Новая точка"));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLngMarker));
 
 
                 String title = "Новая точка";
@@ -90,14 +108,22 @@ public class MapsActivity extends FragmentActivity implements
                                 Toast.LENGTH_LONG).show();
 
                         Intent i = new Intent(getBaseContext(), NewAppFragmentActivity.class);
+
+                        newPointLat = latLng.latitude;
+                        newPointLng = latLng.longitude;
+
+                        i.putExtra(NEW_POINT_LAT, newPointLat);
+                        i.putExtra(NEW_POINT_LNG, newPointLng);
+                        setResult(RESULT_OK, i);
                         startActivity(i);
+                        finish();
                     }
                 });
                 ad.setNegativeButton(button2String, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int arg1) {
                         Toast.makeText(context, "Отмена", Toast.LENGTH_LONG)
                                 .show();
-
+                        newPointMarker.remove();
 
                     }
                 });

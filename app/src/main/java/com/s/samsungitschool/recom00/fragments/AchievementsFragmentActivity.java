@@ -9,10 +9,6 @@ import android.view.ViewGroup;
 
 import com.s.samsungitschool.recom00.R;
 
-/**
- * Created by Админ on 02.05.2018.
- */
-
 public class AchievementsFragmentActivity extends Fragment{
 
     @Nullable

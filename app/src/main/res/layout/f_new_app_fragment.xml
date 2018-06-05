@@ -12,32 +12,6 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20sp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_marginTop="35sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorAccent"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:text="Добавить фото"/>
-
-            <ImageButton
-                android:id="@+id/add_photo_bt"
-                android:layout_marginStart="35sp"
-                android:layout_width="100sp"
-                android:layout_height="100sp"
-                android:background="@drawable/ic_add_photo_bt"
-                android:contentDescription="@string/Add_photo" />
-
-        </LinearLayout>
-
-
-        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="25sp"
@@ -205,6 +179,7 @@
                             android:textStyle="italic"/>
 
                         <EditText
+                            android:id="@+id/comment_et"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="12sp"
@@ -451,4 +426,33 @@
             <TextView card_view:textSize="20sp" card_view:textColor="#ffffff" card_view:id="@+id/profile_saved_people_call" card_view:paddingLeft="10dp" card_view:layout_width="wrap_content" card_view:layout_height="wrap_content" card_view:text="Человек спасено" card_view:layout_toRightOf="@+id/profile_saved_people_icon" card_view:layout_below="@+id/profile_saved_people" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
+-->
+
+<!--
+
+<LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20sp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_marginTop="35sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorAccent"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:text="Добавить фото"/>
+
+            <ImageButton
+                android:id="@+id/add_photo_bt"
+                android:layout_marginStart="35sp"
+                android:layout_width="100sp"
+                android:layout_height="100sp"
+                android:background="@drawable/ic_add_photo_bt"
+                android:contentDescription="@string/Add_photo" />
+
+        </LinearLayout>
+
 -->

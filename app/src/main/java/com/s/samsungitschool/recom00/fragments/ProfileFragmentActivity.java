@@ -50,14 +50,33 @@ public class ProfileFragmentActivity extends Fragment implements View.OnClickLis
         pointsTv = (TextView) getView().findViewById(R.id.points_tv);
         rankTv = (TextView) getView().findViewById(R.id.rank_tv);
 
-        //TODO SET LOGIN AND POINTS
+        //SET LOGIN AND POINTS
+
         loadLoginAndPoints();
 
         loginTv.setText(login);
         pointsTv.setText( Integer.valueOf(points).toString() );
 
-        if (points <= 300) {
+        if (points <= 100) {
             rankTv.setText("Домосед");
+        } else if (points <= 300) {
+            rankTv.setText("Пешеход");
+        } else if (points <= 500) {
+            rankTv.setText("Внимательный пешеход");
+        } else if (points <= 750) {
+            rankTv.setText("Курсант");
+        } else if (points <= 1100) {
+            rankTv.setText("Инспектор");
+        } else if (points <= 1400) {
+            rankTv.setText("Старший инспектор");
+        } else if (points <= 1700) {
+            rankTv.setText("Начальник смены");
+        } else if (points <= 2200) {
+            rankTv.setText("Командир отделения");
+        } else if (points <= 2700) {
+            rankTv.setText("Заместитель командира взводад");
+        } else if (points <= 3500) {
+            rankTv.setText("Командир взвода");
         }
 
         btExit.setOnClickListener(new View.OnClickListener() {

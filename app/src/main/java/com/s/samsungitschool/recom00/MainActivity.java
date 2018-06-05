@@ -89,10 +89,8 @@ public class MainActivity extends AppCompatActivity
         } else {
             Intent i = new Intent(this, EntryActivity.class);
             startActivity(i);
+            finish();
         }
-
-        // TODO Finish
-        //finish();
 
     }
 

@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.net.ConnectException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
@@ -33,7 +34,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RegistrationActivity extends AppCompatActivity {
 
     private static final String TAG = "RegistrationActivity";
-    private static final String URI_FOR_REGISTRATION = "http://188.235.216.130:80";
+    private static final String URI_FOR_REGISTRATION = "http://188.235.192.155:80";
     //private static final String URI_FOR_REGISTRATION = "http://171.33.253.145:8080";
     //private static final String URI_FOR_REGISTRATION = "localhost:8080";
 
@@ -162,7 +163,11 @@ public class RegistrationActivity extends AppCompatActivity {
                 e.printStackTrace();
                 serverError = true;
                 //Toast.makeText(getBaseContext(), "Ошибка сервера" + e, Toast.LENGTH_LONG).show();
+            } catch (ConnectException e) {
+                serverError = true;
+                e.printStackTrace();
             } catch (IOException e) {
+                serverError = true;
                 e.printStackTrace();
             }
             return null;

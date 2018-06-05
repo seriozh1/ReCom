@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.stream.MalformedJsonException;
 import com.s.samsungitschool.recom00.MainActivity;
 import com.s.samsungitschool.recom00.R;
@@ -32,10 +34,10 @@ public class EntryActivity extends AppCompatActivity {
 
     ProfileFragmentActivity profileFragmentActivity;
 
-    private static final String URI_FOR_REGISTRATION = "http://188.235.216.130:80";
+    private static final String URI_FOR_REGISTRATION = "http://188.235.192.155:80";
 
     AlertDialog.Builder alertDialogBuilderInput;
-    private String serverAnsString = "";
+    private String authString = "";
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
@@ -43,6 +45,7 @@ public class EntryActivity extends AppCompatActivity {
     private final String LOGIN = "LOGIN";
     private final String POINTS = "POINTS";
     private final String AUTHORISED = "AUTHORISED";
+    private final String AUTH_STRING = "AUTH_STRING";
 
     EditText loginEt, passwordEt;
     Button loginIn, goToRegister;
@@ -72,15 +75,16 @@ public class EntryActivity extends AppCompatActivity {
                     alertDialogBuilderInput.setTitle("Ошибка");
                     alertDialogBuilderInput.setMessage("Заполните все поля");
                     displayAlert("input_error");
-                } else if ( loginEt.getText().toString().equals("test") && passwordEt.getText().toString().equals("123") ) {
+                }
+                // Test case
+                else if ( loginEt.getText().toString().equals("test") && passwordEt.getText().toString().equals("123") ) {
                     Intent i = new Intent(getBaseContext(), MainActivity.class);
                     i.putExtra(AUTHORISED, true);
-                    // TODO FIx SP
 
                     sharedPreferences = getSharedPreferences("SP", MODE_PRIVATE);
                     editor = sharedPreferences.edit();
                     editor.putString(LOGIN, "test");
-                    editor.putInt(POINTS, 123);
+                    editor.putInt(POINTS, 50);
                     editor.apply();
 
                     startActivity(i);
@@ -105,9 +109,13 @@ public class EntryActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
 
+            Gson gson = new GsonBuilder()
+                    .setLenient()
+                    .create();
+
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(URI_FOR_REGISTRATION)
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();
 
             EntryUserService registerUserService = retrofit.create(EntryUserService.class);
@@ -116,7 +124,13 @@ public class EntryActivity extends AppCompatActivity {
             try {
                 Response response = userResponse.execute();
 
-                serverAnsString = response.toString();
+                authString = response.toString();
+
+                sharedPreferences = getSharedPreferences("SP", MODE_PRIVATE);
+                editor = sharedPreferences.edit();
+                editor.putString(AUTH_STRING, authString);
+                editor.apply();
+
             } catch (MalformedJsonException e) {
                 e.printStackTrace();
                 Log.i("MalformedJsonException ", e.getMessage());
@@ -125,12 +139,12 @@ public class EntryActivity extends AppCompatActivity {
             }
 
 
-            if (serverAnsString != null) {
+            if (authString == null) {
                 alertDialogBuilderInput.setTitle("Ошибка");
                 alertDialogBuilderInput.setMessage("Ошибка сервера");
                 errorInput = true;
             } else {
-                if (serverAnsString.equals("Authentication failed")) {
+                if (authString.equals("Authentication failed")) {
                     alertDialogBuilderInput.setTitle("Ошибка авторизации");
                     alertDialogBuilderInput.setMessage("Проверьте вводимые данные и повторите попытку");
                     errorInput = true;
@@ -177,6 +191,11 @@ public class EntryActivity extends AppCompatActivity {
 
             if (userFromServer != null) {
 
+                sharedPreferences = getSharedPreferences("SP", MODE_PRIVATE);
+                editor = sharedPreferences.edit();
+                editor.putString(LOGIN, userFromServer.getLogin());
+                editor.putInt(POINTS, userFromServer.getPoints());
+                editor.apply();
 
                 startProfileFragment();
             }
@@ -189,6 +208,7 @@ public class EntryActivity extends AppCompatActivity {
         /*FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.container, this);*/
         Intent i = new Intent(getBaseContext(), ProfileFragmentActivity.class);
+        i.putExtra(AUTHORISED, true);
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(LOGIN, userFromServer.getLogin());
