@@ -33,10 +33,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RegistrationActivity extends AppCompatActivity {
 
-    private static final String TAG = "RegistrationActivity";
-    private static final String URI_FOR_REGISTRATION = "http://188.235.192.155:80";
-    //private static final String URI_FOR_REGISTRATION = "http://171.33.253.145:8080";
-    //private static final String URI_FOR_REGISTRATION = "localhost:8080";
+    private static final String URI_FOR_REGISTRATION = "http://37.112.201.156:80";
 
     ProgressDialog progressDialog;
     AlertDialog.Builder alertDialogBuilderInput;
@@ -47,10 +44,10 @@ public class RegistrationActivity extends AppCompatActivity {
     private String login = "";
     private String email = "";
     private String password = "";
-    private User userFromServer;
     private String serverAnsString;
 
     boolean errorInput = false;
+    boolean registrationSuccessful = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,30 +129,25 @@ public class RegistrationActivity extends AppCompatActivity {
             Call<Object> registerResponse = registerUserService.registerUser(login, password, email);
             try {
                 Response response = registerResponse.execute();
-                //serverAnsString = registerResponse.body().toString();
-
-                serverAnsString = response.toString();
+                serverAnsString = response.body().toString();
 
                 if (serverAnsString == null || serverAnsString.equals("")) {
                     alertDialogBuilderInput.setTitle("Ошибка");
                     alertDialogBuilderInput.setMessage("Ошибка сервера");
                     errorInput = true;
                 } else {
-                    if (serverAnsString.equals("Login already registered")) {
+                    if (serverAnsString.equals("Login_already_registered")) {
 
                         alertDialogBuilderInput.setTitle("Ошибка");
                         alertDialogBuilderInput.setMessage("Пользователь с таким логином уже существует.");
                         errorInput = true;
-                    } else if (serverAnsString.equals("Email already registered")) {
+                    } else if (serverAnsString.equals("Email_already_registered")) {
 
                         alertDialogBuilderInput.setTitle("Ошибка");
                         alertDialogBuilderInput.setMessage("Пользователь с такой почтой уже существует.");
                         errorInput = true;
-                    } else if (serverAnsString.equals("User registered")){
-                        alertDialogBuilderInput.setTitle("Успешно");
-                        alertDialogBuilderInput.setMessage("Вы успешно прошли регистрацию.");
-                        errorInput = true;
-
+                    } else if (serverAnsString.equals("User_registered")){
+                        registrationSuccessful = true;
 
                         Intent intent = new Intent(getApplicationContext(), EntryActivity.class);
                         startActivity(intent);
@@ -170,7 +162,7 @@ public class RegistrationActivity extends AppCompatActivity {
             } catch (NullPointerException e) {
                 e.printStackTrace();
                 serverError = true;
-                //Toast.makeText(getBaseContext(), "Ошибка сервера" + e, Toast.LENGTH_LONG).show();
+
             } catch (ConnectException e) {
                 serverError = true;
                 e.printStackTrace();
@@ -196,6 +188,9 @@ public class RegistrationActivity extends AppCompatActivity {
             }
             if (serverError) {
                 Toast.makeText(getBaseContext(), "Ошибка сервера", Toast.LENGTH_LONG).show();
+            }
+            if (registrationSuccessful) {
+                Toast.makeText(getBaseContext(), "Регистрация успешна", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -233,7 +228,6 @@ public class RegistrationActivity extends AppCompatActivity {
         if (!progressDialog.isShowing())
             progressDialog.show();
     }
-
 
 
     private void hideDialog() {

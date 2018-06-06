@@ -34,7 +34,7 @@ public class EntryActivity extends AppCompatActivity {
 
     ProfileFragmentActivity profileFragmentActivity;
 
-    private static final String URI_FOR_REGISTRATION = "http://188.235.192.155:80";
+    private static final String URI_FOR_REGISTRATION = "http://37.112.201.156:80";
 
     AlertDialog.Builder alertDialogBuilderInput;
     private String authString = "";
@@ -145,7 +145,7 @@ public class EntryActivity extends AppCompatActivity {
                 alertDialogBuilderInput.setMessage("Ошибка сервера");
                 errorInput = true;
             } else {
-                if (authString.equals("Authentication failed")) {
+                if (authString.equals("Authentication_failed")) {
                     alertDialogBuilderInput.setTitle("Ошибка авторизации");
                     alertDialogBuilderInput.setMessage("Проверьте вводимые данные и повторите попытку");
                     errorInput = true;
@@ -195,14 +195,13 @@ public class EntryActivity extends AppCompatActivity {
                     alertDialogBuilderInput.setTitle("Ошибка");
                     alertDialogBuilderInput.setMessage("Ошибка сервера");
                     errorInput = true;
-                } else if (registerString.equals("User does not exists")) {
+                } else if (registerString.equals("User_does_not_exists")) {
 
                     alertDialogBuilderInput.setTitle("Ошибка");
                     alertDialogBuilderInput.setMessage("Данный пользователь не существует");
                     errorInput = true;
                 } else {
-                    //TODO FIX !!!!!!!!!!!!!!!!
-                    userFromServer = (User) userResponse.body();
+                    userFromServer = userResponse.body();
                 }
 
             } catch (IOException e) {
@@ -225,17 +224,15 @@ public class EntryActivity extends AppCompatActivity {
     }
 
     private void startProfileFragment() {
-        /*FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.container, this);*/
-        Intent i = new Intent(getBaseContext(), ProfileFragmentActivity.class);
+        Intent i = new Intent(getBaseContext(), MainActivity.class);
         i.putExtra(AUTHORISED, true);
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(LOGIN, userFromServer.getLogin());
         editor.putInt(POINTS, userFromServer.getPoints());
-        editor.apply();
-
+        editor.putBoolean(AUTHORISED, true);
         startActivity(i);
+        finish();
     }
 
     private void displayAlert(final String code) {
@@ -252,5 +249,6 @@ public class EntryActivity extends AppCompatActivity {
         alertDialog.show();
 
     }
+
 
 }

@@ -29,7 +29,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.MalformedJsonException;
+import com.s.samsungitschool.recom00.MainActivity;
 import com.s.samsungitschool.recom00.R;
+import com.s.samsungitschool.recom00.auth.RegistrationActivity;
 import com.s.samsungitschool.recom00.interfaces.CityService;
 import com.s.samsungitschool.recom00.interfaces.EntryUserService;
 import com.s.samsungitschool.recom00.interfaces.MapService;
@@ -56,7 +58,7 @@ public class NewAppFragmentActivity extends Fragment {
 
     ProblemPoint pointFromServer;
 
-    private static final String URI_FOR_REGISTRATION = "http://188.235.192.155:80";
+    private static final String URI_FOR_REGISTRATION = "http://37.112.201.156:80";
 
     AlertDialog.Builder alertDialogBuilderInput;
 
@@ -79,6 +81,7 @@ public class NewAppFragmentActivity extends Fragment {
     private double newPointLng;
 
     private String addPointServerAns = "";
+    private String getPointServerAns = "";
     private String addNoteServerAns = "";
     private String sendComplaintServerAns = "";
 
@@ -100,17 +103,24 @@ public class NewAppFragmentActivity extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        sharedPreferences = getActivity().getSharedPreferences("SP", MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putBoolean(GET_ADDRESS_FROM_MAP, false);
+        editor.apply();
+
         context = getActivity();
 
-        addressBT = (Button) getView().findViewById(R.id.address_bt);
-        sendBT = (Button) getView().findViewById(R.id.send_bt);
+        addressBT = getView().findViewById(R.id.address_bt);
+        sendBT = getView().findViewById(R.id.send_bt);
 
-        addressTV = (TextView) getView().findViewById(R.id.address_tv);
-        commentET = (EditText) getView().findViewById(R.id.comment_et);
+        addressTV = getView().findViewById(R.id.address_tv);
+        addressTV.setText("Укажите адрес!");
+        commentET = getView().findViewById(R.id.comment_et);
 
-        spinnerParking = (Spinner) getView().findViewById(R.id.spinnerProblemParking);
-        spinnerPit = (Spinner) getView().findViewById(R.id.spinnerProblemPit);
-        spinnerSign = (Spinner) getView().findViewById(R.id.spinnerProblemSign);
+        spinnerParking = getView().findViewById(R.id.spinnerProblemParking);
+        spinnerPit = getView().findViewById(R.id.spinnerProblemPit);
+        spinnerSign = getView().findViewById(R.id.spinnerProblemSign);
+        alertDialogBuilderInput = new AlertDialog.Builder(getActivity());
 
 
         TabHost tabHost = (TabHost) getView().findViewById(R.id.tabHost);
@@ -143,38 +153,14 @@ public class NewAppFragmentActivity extends Fragment {
         addressBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent i = new Intent( getActivity(), MapsActivity.class);
                 startActivity(i);
 
-                String tempString = "";
 
-                /*while (!getAddressFromMap) {
-                    sharedPreferences = getActivity().getSharedPreferences("SP", MODE_PRIVATE);
-
-                    getAddressFromMap = sharedPreferences.getBoolean(GET_ADDRESS_FROM_MAP, false);
-
-                    newPointLat = (double) sharedPreferences.getFloat(NEW_POINT_LAT, 0);
-                    newPointLng = (double) sharedPreferences.getFloat(NEW_POINT_LNG, 0);
-
-                    String newPointLatString = Double.toString(newPointLat);
-                    String newPointLngString = Double.toString(newPointLng);
-
-                    if (newPointLatString.length() > 5) {
-                        if (newPointLngString.length() > 5) {
-                            tempString = newPointLatString.substring(0, 5) + " " + newPointLngString.substring(0, 5);
-                        } else {
-                            tempString = newPointLatString.substring(0, 5) + " " + newPointLngString;
-                        }
-                    } else {
-                        tempString = newPointLatString + " " + newPointLngString;
-                    }
-                }*/
-
-
-
-                //TODO FIX THIS
-                //addressTV.setText("   Выбран  ");
+                getAddressFromMap = sharedPreferences.getBoolean(GET_ADDRESS_FROM_MAP, false);
+                if (getAddressFromMap) {
+                    addressTV.setText("Данные адреса успешно сохранены");
+                }
             }
         });
 
@@ -182,13 +168,18 @@ public class NewAppFragmentActivity extends Fragment {
             @Override
             public void onClick(View v) {
 
+                getAddressFromMap = sharedPreferences.getBoolean(GET_ADDRESS_FROM_MAP, false);
+                if (getAddressFromMap) {
+                    addressTV.setText("Данные адреса успешно сохранены");
+                }
+
                 sharedPreferences = getActivity().getSharedPreferences("SP", MODE_PRIVATE);
 
                 authString = sharedPreferences.getString(AUTH_STRING, "");
                 getAddressFromMap = sharedPreferences.getBoolean(GET_ADDRESS_FROM_MAP, false);
 
                 if (!authString.equals("")) {
-                    //TODO Fix alertDialog
+
                     if (!getAddressFromMap) {
                         alertDialogBuilderInput.setTitle("Ошибка");
                         alertDialogBuilderInput.setMessage("Не выбран адресс");
@@ -199,9 +190,7 @@ public class NewAppFragmentActivity extends Fragment {
                         newPointLat = (double) sharedPreferences.getFloat(NEW_POINT_LAT, 0);
                         newPointLng = (double) sharedPreferences.getFloat(NEW_POINT_LNG, 0);
 
-                        new addPointAsyncTask().execute("");
-                        new getPointAsyncTask().execute("");
-                        new addNoteAsyncTask().execute("");
+                        new loadDataAsyncTask().execute("");
                     }
 
                 } else {
@@ -216,37 +205,40 @@ public class NewAppFragmentActivity extends Fragment {
 
                     // ============= Send complaint =============
                     new sendComplaintAsyncTask().execute("");
+                    // ==========================================
+
                     if (sendSuccessfully) {
                         Toast.makeText(getActivity(), "Жалоба успешно отправлена", Toast.LENGTH_LONG).show();
+
+                        Intent i = new Intent(getActivity(), ProfileFragmentActivity.class);
+                        startActivity(i);
+                    } else {
+                        Toast.makeText(getActivity(), "Ошибка отправки жалобы", Toast.LENGTH_LONG).show();
                     }
+
+                } else {
+                    Toast.makeText(getActivity(), "Ошибка загрузки данных на сервер", Toast.LENGTH_LONG).show();
                 }
-
             }
-        });
 
+            /*@Override
+            public void onClick(View v) {
+
+
+
+            }*/
+        });
 
         super.onActivityCreated(savedInstanceState);
     }
 
-    /*@Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (resultCode) {
-            case RESULT_OK:
-                newPointLat = data.getDoubleExtra(NEW_POINT_LAT, 0);
-                newPointLng = data.getDoubleExtra(NEW_POINT_LNG, 0);
 
-                String tempString = newPointLat + " " + newPointLng;
-                addressTV.setText(tempString);
-                break;
-        }
-    }*/
-
-    // ================= add Point =================
-
-    class addPointAsyncTask extends AsyncTask<String, String, String> {
+    class loadDataAsyncTask extends AsyncTask<String, String, String> {
 
         @Override
         protected String doInBackground(String... strings) {
+
+            // ================= add Point =================
 
             Gson gson = new GsonBuilder()
                     .setLenient()
@@ -257,28 +249,29 @@ public class NewAppFragmentActivity extends Fragment {
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();
 
-            MapService mapService = retrofit.create(MapService.class);
-            Call<Object> call = mapService.addPoint(authString, newPointLat, newPointLng);
+            MapService mapService_ToAddPoint = retrofit.create(MapService.class);
+            Call<Object> callToAddPoint = mapService_ToAddPoint.addPoint(authString, newPointLat, newPointLng);
 
-            Response response = null;
+            Response response_ToAddPoint = null;
             try {
-                response = call.execute();
-                addPointServerAns = response.toString();
+                response_ToAddPoint = callToAddPoint.execute();
+                addPointServerAns = response_ToAddPoint.toString();
 
             } catch (IOException e) {
+                loadSuccessfully = false;
                 e.printStackTrace();
             }
 
             if (addPointServerAns != null ) {
                 if (!addPointServerAns.equals("")) {
 
-                    if (addPointServerAns.equals("User not authorized")) {
+                    if (addPointServerAns.equals("User_not_authorized")) {
                         alertDialogBuilderInput.setTitle("Ошибка");
                         alertDialogBuilderInput.setMessage("Вы не авторизовались");
                         serverError = true;
                         loadSuccessfully = false;
 
-                    } else if (addPointServerAns.equals("0")) {
+                    } else {
                         alertDialogBuilderInput.setTitle("Ошибка");
                         alertDialogBuilderInput.setMessage("Ошибка сервера");
                         serverError = true;
@@ -287,87 +280,44 @@ public class NewAppFragmentActivity extends Fragment {
                     }
                 }
             }
+            // ================= get Point =================
 
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            if (serverError) {
-                displayAlert("server_error");
-            }
-
-        }
-    }
-
-    // ================= get Point =================
-
-    class getPointAsyncTask extends AsyncTask<String, String, String> {
-
-        @Override
-        protected String doInBackground(String... strings) {
-
-            Gson gson = new GsonBuilder()
-                    .setLenient()
-                    .create();
-
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(URI_FOR_REGISTRATION)
-                    .addConverterFactory(GsonConverterFactory.create(gson))
-                    .build();
-
-            MapService mapService = retrofit.create(MapService.class);
-            Call<ProblemPoint> call = mapService.getPointByLatAndLong(authString, newPointLat, newPointLng);
+            MapService mapService_getPoint = retrofit.create(MapService.class);
+            Call<ProblemPoint> call_getPoint = mapService_getPoint.getPointByLatAndLong(authString, newPointLat, newPointLng);
 
             try {
-                Response<ProblemPoint> response = call.execute();
-                pointFromServer = response.body();
+                Response<ProblemPoint> response_getPoint = call_getPoint.execute();
+                getPointServerAns = response_getPoint.toString();
+
+                if (getPointServerAns != null) {
+                    if (!getPointServerAns.equals("")) {
+
+                        if (getPointServerAns.equals("Point_not_found")) {
+                            alertDialogBuilderInput.setTitle("Ошибка");
+                            alertDialogBuilderInput.setMessage("Точка не найдена");
+                            serverError = true;
+                            loadSuccessfully = false;
+
+                        } else if (getPointServerAns.equals("Error")) {
+                            alertDialogBuilderInput.setTitle("Ошибка");
+                            alertDialogBuilderInput.setMessage("Ошибка сервера");
+                            serverError = true;
+                            loadSuccessfully = false;
+
+                        } else {
+                            pointFromServer = response_getPoint.body();
+                        }
+                    }
+                }
 
             } catch (IOException e) {
+                loadSuccessfully = false;
                 e.printStackTrace();
             }
 
-            if (addPointServerAns != null) {
-                if (!addPointServerAns.equals("")) {
-
-                    if (addPointServerAns.equals("User not authorized")) {
-                        alertDialogBuilderInput.setTitle("Ошибка");
-                        alertDialogBuilderInput.setMessage("Вы не авторизовались");
-                        serverError = true;
-                        loadSuccessfully = false;
-
-                    } else if (addPointServerAns.equals("0")) {
-                        alertDialogBuilderInput.setTitle("Ошибка");
-                        alertDialogBuilderInput.setMessage("Ошибка сервера");
-                        serverError = true;
-                        loadSuccessfully = false;
-
-                    }
-                }
-            }
-
-            return null;
-        }
 
 
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            if (serverError) {
-                displayAlert("server_error");
-            }
-
-        }
-    }
-    // ================= add Note =================
-
-    class addNoteAsyncTask extends AsyncTask<String, String, String> {
-
-        @Override
-        protected String doInBackground(String... strings) {
+            // ================= add Note =================
 
             // ======== Message ========
             String messageToSend = commentET.toString();
@@ -383,22 +333,14 @@ public class NewAppFragmentActivity extends Fragment {
 
             messageToSend += typeOfProblem + "\n";
             // =========================
-            Gson gson = new GsonBuilder()
-                    .setLenient()
-                    .create();
 
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(URI_FOR_REGISTRATION)
-                    .addConverterFactory(GsonConverterFactory.create(gson))
-                    .build();
+            MapService mapService_addNote = retrofit.create(MapService.class);
+            Call<Object> call_addNote = mapService_addNote.addNote(authString, pointFromServer.getId(), messageToSend);
 
-            MapService mapService = retrofit.create(MapService.class);
-            Call<Object> call = mapService.addNote(authString, pointFromServer.getId(), messageToSend);
-
-            Response response = null;
+            Response response_addNote = null;
             try {
-                response = call.execute();
-                addNoteServerAns = response.toString();
+                response_addNote = call_addNote.execute();
+                addNoteServerAns = response_addNote.toString();
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -407,27 +349,37 @@ public class NewAppFragmentActivity extends Fragment {
             if (addNoteServerAns != null) {
                 if (!addNoteServerAns.equals("")) {
 
-                    if (addNoteServerAns.equals("User not authorized")) {
+                    if (addNoteServerAns.equals("User_not_authorized")) {
                         alertDialogBuilderInput.setTitle("Ошибка");
                         alertDialogBuilderInput.setMessage("Вы не авторизовались");
                         serverError = true;
                         loadSuccessfully = false;
 
-                    } else if (addNoteServerAns.equals("Point do not exist")) {
+                    } else if (addNoteServerAns.equals("Point_do_not_exist")) {
                         alertDialogBuilderInput.setTitle("Ошибка");
                         alertDialogBuilderInput.setMessage("Точка не добавлена");
                         serverError = true;
                         loadSuccessfully = false;
 
-                    } else if (addNoteServerAns.equals("Note already exists")) {
+                    } else if (addNoteServerAns.equals("Note_already_exists")) {
                         alertDialogBuilderInput.setTitle("Ошибка");
                         alertDialogBuilderInput.setMessage("Запись уже существует");
                         serverError = true;
                         loadSuccessfully = false;
 
+                    } else if (addNoteServerAns.equals("Note_saved")) {
+                        loadSuccessfully = true;
+
+                    } else {
+
+                        alertDialogBuilderInput.setTitle("Ошибка");
+                        alertDialogBuilderInput.setMessage("Ошибка загрузки данных");
+                        serverError = true;
+                        loadSuccessfully = false;
                     }
                 }
             }
+
 
             return null;
         }
@@ -437,10 +389,12 @@ public class NewAppFragmentActivity extends Fragment {
             super.onPostExecute(s);
 
             if (serverError) {
+                loadSuccessfully = false;
                 displayAlert("server_error");
             }
 
         }
+
     }
 
         // ================= Send Complaint =================
@@ -474,24 +428,33 @@ public class NewAppFragmentActivity extends Fragment {
                 if (sendComplaintServerAns != null) {
                     if (!sendComplaintServerAns.equals("")) {
 
-                        if (sendComplaintServerAns.equals("User not authorized")) {
+                        if (sendComplaintServerAns.equals("User_not_authorized")) {
                             alertDialogBuilderInput.setTitle("Ошибка");
                             alertDialogBuilderInput.setMessage("Вы не авторизовались");
                             serverError = true;
                             sendSuccessfully = false;
 
-                        } else if (sendComplaintServerAns.equals("Point not found")) {
+                        } else if (sendComplaintServerAns.equals("Point_not_found")) {
                             alertDialogBuilderInput.setTitle("Ошибка");
                             alertDialogBuilderInput.setMessage("Точка не найдена");
                             serverError = true;
                             sendSuccessfully = false;
 
-                        } else if (sendComplaintServerAns.equals("Note already exists")) {
+                        } else if (sendComplaintServerAns.equals("Note_already_exists")) {
                             alertDialogBuilderInput.setTitle("Ошибка");
                             alertDialogBuilderInput.setMessage("Запись уже существует");
                             serverError = true;
                             sendSuccessfully = false;
 
+                        } else if (sendComplaintServerAns.equals("Message_sent_successfully")) {
+                            sendSuccessfully = true;
+
+                        } else {
+
+                            alertDialogBuilderInput.setTitle("Ошибка");
+                            alertDialogBuilderInput.setMessage("Ошибка отправки");
+                            serverError = true;
+                            sendSuccessfully = false;
                         }
                     }
                 }

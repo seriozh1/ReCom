@@ -132,6 +132,8 @@ public class MapsActivity extends FragmentActivity implements
                                 .show();
                         newPointMarker.remove();
 
+
+
                     }
                 });
                 ad.setCancelable(true);
