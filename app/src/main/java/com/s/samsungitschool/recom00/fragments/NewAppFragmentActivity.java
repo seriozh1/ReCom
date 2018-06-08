@@ -277,7 +277,7 @@ public class NewAppFragmentActivity extends Fragment {
                         loadSuccessfully = false;
 
                     } else {
-                        pointId = (long) Long.valueOf(addPointServerAns);
+                        pointId = Long.valueOf(addPointServerAns);
 
                         loadSuccessfully = true;
                     }
