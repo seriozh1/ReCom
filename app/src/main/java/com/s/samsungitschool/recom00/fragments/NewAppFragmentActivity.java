@@ -303,6 +303,7 @@ public class NewAppFragmentActivity extends Fragment {
             Response response_addNote = null;
             try {
                 response_addNote = call_addNote.execute();
+                
                 addNoteServerAns = response_addNote.body().toString();
 
             } catch (IOException e) {
