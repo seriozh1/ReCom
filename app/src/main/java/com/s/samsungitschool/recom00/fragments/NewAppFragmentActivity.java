@@ -54,15 +54,12 @@ public class NewAppFragmentActivity extends Fragment {
     AlertDialog.Builder ad;
     Context context;
 
-    String tabSelected = "";
-
-    ProblemPoint pointFromServer;
-
     private static final String URI_FOR_REGISTRATION = "http://37.112.201.156:80";
 
     AlertDialog.Builder alertDialogBuilderInput;
 
     Spinner spinnerParking, spinnerPit, spinnerSign;
+    private String tabSelected = "tag1";
 
     Button addressBT, sendBT;
     TextView addressTV;
@@ -76,14 +73,12 @@ public class NewAppFragmentActivity extends Fragment {
     private final String NEW_POINT_LNG = "NEW_POINT_LNG";
     private final String AUTH_STRING = "AUTH_STRING";
     private final String GET_ADDRESS_FROM_MAP = "GET_ADDRESS_FROM_MAP";
-    private final String POINT_ID = "POINT_ID";
 
     private double newPointLat;
     private double newPointLng;
     private long pointId = -1;
 
     private String addPointServerAns = "";
-    private String getPointServerAns = "";
     private String addNoteServerAns = "";
     private String sendComplaintServerAns = "";
 
@@ -174,8 +169,6 @@ public class NewAppFragmentActivity extends Fragment {
                 if (getAddressFromMap) {
                     addressTV.setText("Данные адреса успешно сохранены");
                 }
-
-                //Toast.makeText(getActivity(), "Жалоба успешно отправлена", Toast.LENGTH_LONG).show();
 
                 sharedPreferences = getActivity().getSharedPreferences("SP", MODE_PRIVATE);
 
@@ -277,64 +270,31 @@ public class NewAppFragmentActivity extends Fragment {
                         loadSuccessfully = false;
 
                     } else {
-                        pointId = Long.valueOf(addPointServerAns);
+                        pointId = (long) Float.parseFloat(addPointServerAns);
 
                         loadSuccessfully = true;
                     }
                 }
             }
-            // ================= get Point =================
-            /*
-            MapService mapService_getPoint = retrofit.create(MapService.class);
-            Call<ProblemPoint> call_getPoint = mapService_getPoint.getPointByLatAndLong(authString, newPointLat, newPointLng);
-
-            try {
-                Response<ProblemPoint> response_getPoint = call_getPoint.execute();
-                getPointServerAns = response_getPoint.toString();
-
-                if (getPointServerAns != null) {
-                    if (!getPointServerAns.equals("")) {
-
-                        if (getPointServerAns.equals("Point_not_found")) {
-                            alertDialogBuilderInput.setTitle("Ошибка");
-                            alertDialogBuilderInput.setMessage("Точка не найдена");
-                            showAlertDialog = true;
-                            loadSuccessfully = false;
-
-                        } else if (getPointServerAns.equals("Error")) {
-                            alertDialogBuilderInput.setTitle("Ошибка");
-                            alertDialogBuilderInput.setMessage("Ошибка сервера");
-                            showAlertDialog = true;
-                            loadSuccessfully = false;
-
-                        } else {
-                            pointFromServer = response_getPoint.body();
-                        }
-                    }
-                }
-
-            } catch (IOException e) {
-                loadSuccessfully = false;
-                e.printStackTrace();
-            }
 
 
-            */
             // ================= add Note =================
 
             // ======== Message ========
-            String messageToSend = commentET.toString();
+
+            String messageToSend = commentET.getText().toString();
+
 
             String typeOfProblem = "";
-            if (tabSelected.equals("tab1")) {
+            if (tabSelected.equals("tag1")) {
                 typeOfProblem = spinnerParking.getSelectedItem().toString();
-            } else if (tabSelected.equals("tab2")) {
+            } else if (tabSelected.equals("tag2")) {
                 typeOfProblem = spinnerPit.getSelectedItem().toString();
-            } else if (tabSelected.equals("tab3")) {
+            } else if (tabSelected.equals("tag3")) {
                 typeOfProblem = spinnerSign.getSelectedItem().toString();
             }
 
-            messageToSend += typeOfProblem + "\n";
+            messageToSend = "Тип проблемы: " + typeOfProblem + " \n " + messageToSend;
             // =========================
 
             MapService mapService_addNote = retrofit.create(MapService.class);
@@ -343,7 +303,7 @@ public class NewAppFragmentActivity extends Fragment {
             Response response_addNote = null;
             try {
                 response_addNote = call_addNote.execute();
-                addNoteServerAns = response_addNote.toString();
+                addNoteServerAns = response_addNote.body().toString();
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -371,7 +331,12 @@ public class NewAppFragmentActivity extends Fragment {
                         loadSuccessfully = false;
 
                     } else if (addNoteServerAns.equals("Note_saved")) {
-                        loadSuccessfully = true;
+
+                        /*alertDialogBuilderInput.setTitle("Успешно");
+                        alertDialogBuilderInput.setMessage("Жалоба упешно загружена на сервер");
+                        showAlertDialog = true;
+                        loadSuccessfully = true;*/
+
                         // ============= Send complaint =============
                         new sendComplaintAsyncTask().execute("");
                         // ==========================================
@@ -423,12 +388,12 @@ public class NewAppFragmentActivity extends Fragment {
                         .build();
 
                 CityService mapService = retrofit.create(CityService.class);
-                Call<Object> call = mapService.sendComplaint(authString, pointFromServer.getId());
+                Call<Object> call = mapService.sendComplaint(authString, pointId);
 
                 Response response = null;
                 try {
                     response = call.execute();
-                    sendComplaintServerAns = response.toString();
+                    sendComplaintServerAns = response.body().toString();
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -456,6 +421,9 @@ public class NewAppFragmentActivity extends Fragment {
                             sendSuccessfully = false;
 
                         } else if (sendComplaintServerAns.equals("Message_sent_successfully")) {
+                            alertDialogBuilderInput.setTitle("Успешно");
+                            alertDialogBuilderInput.setMessage("Жалоба успешно отправлена");
+                            showAlertDialog = true;
                             sendSuccessfully = true;
 
                         } else {
