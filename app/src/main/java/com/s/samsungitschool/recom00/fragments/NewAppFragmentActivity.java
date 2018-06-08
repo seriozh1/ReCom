@@ -76,18 +76,20 @@ public class NewAppFragmentActivity extends Fragment {
     private final String NEW_POINT_LNG = "NEW_POINT_LNG";
     private final String AUTH_STRING = "AUTH_STRING";
     private final String GET_ADDRESS_FROM_MAP = "GET_ADDRESS_FROM_MAP";
+    private final String POINT_ID = "POINT_ID";
 
     private double newPointLat;
     private double newPointLng;
+    private long pointId = -1;
 
     private String addPointServerAns = "";
     private String getPointServerAns = "";
     private String addNoteServerAns = "";
     private String sendComplaintServerAns = "";
 
-    boolean serverError = false;
-    boolean loadSuccessfully = true;
-    boolean sendSuccessfully = true;
+    boolean showAlertDialog = false;
+    boolean loadSuccessfully = false;
+    boolean sendSuccessfully = false;
     boolean getAddressFromMap = false;
 
 
@@ -173,6 +175,8 @@ public class NewAppFragmentActivity extends Fragment {
                     addressTV.setText("Данные адреса успешно сохранены");
                 }
 
+                //Toast.makeText(getActivity(), "Жалоба успешно отправлена", Toast.LENGTH_LONG).show();
+
                 sharedPreferences = getActivity().getSharedPreferences("SP", MODE_PRIVATE);
 
                 authString = sharedPreferences.getString(AUTH_STRING, "");
@@ -183,7 +187,7 @@ public class NewAppFragmentActivity extends Fragment {
                     if (!getAddressFromMap) {
                         alertDialogBuilderInput.setTitle("Ошибка");
                         alertDialogBuilderInput.setMessage("Не выбран адресс");
-                        serverError = true;
+                        showAlertDialog = true;
                         loadSuccessfully = false;
                     } else {
                         sharedPreferences = getActivity().getSharedPreferences("SP", MODE_PRIVATE);
@@ -196,7 +200,7 @@ public class NewAppFragmentActivity extends Fragment {
                 } else {
                     alertDialogBuilderInput.setTitle("Ошибка");
                     alertDialogBuilderInput.setMessage("Вы не авторизовались");
-                    serverError = true;
+                    showAlertDialog = true;
                     loadSuccessfully = false;
                 }
 
@@ -210,7 +214,7 @@ public class NewAppFragmentActivity extends Fragment {
                     if (sendSuccessfully) {
                         Toast.makeText(getActivity(), "Жалоба успешно отправлена", Toast.LENGTH_LONG).show();
 
-                        Intent i = new Intent(getActivity(), ProfileFragmentActivity.class);
+                        Intent i = new Intent(getActivity(), MainActivity.class);
                         startActivity(i);
                     } else {
                         Toast.makeText(getActivity(), "Ошибка отправки жалобы", Toast.LENGTH_LONG).show();
@@ -221,12 +225,7 @@ public class NewAppFragmentActivity extends Fragment {
                 }
             }
 
-            /*@Override
-            public void onClick(View v) {
 
-
-
-            }*/
         });
 
         super.onActivityCreated(savedInstanceState);
@@ -255,7 +254,7 @@ public class NewAppFragmentActivity extends Fragment {
             Response response_ToAddPoint = null;
             try {
                 response_ToAddPoint = callToAddPoint.execute();
-                addPointServerAns = response_ToAddPoint.toString();
+                addPointServerAns = response_ToAddPoint.body().toString();
 
             } catch (IOException e) {
                 loadSuccessfully = false;
@@ -268,20 +267,23 @@ public class NewAppFragmentActivity extends Fragment {
                     if (addPointServerAns.equals("User_not_authorized")) {
                         alertDialogBuilderInput.setTitle("Ошибка");
                         alertDialogBuilderInput.setMessage("Вы не авторизовались");
-                        serverError = true;
+                        showAlertDialog = true;
+                        loadSuccessfully = false;
+
+                    } else if (addPointServerAns.equals("0")) {
+                        alertDialogBuilderInput.setTitle("Ошибка");
+                        alertDialogBuilderInput.setMessage("Ошибка сервера");
+                        showAlertDialog = true;
                         loadSuccessfully = false;
 
                     } else {
-                        alertDialogBuilderInput.setTitle("Ошибка");
-                        alertDialogBuilderInput.setMessage("Ошибка сервера");
-                        serverError = true;
-                        loadSuccessfully = false;
-
+                        pointId = Long.valueOf(addPointServerAns);
+                        loadSuccessfully = true;
                     }
                 }
             }
             // ================= get Point =================
-
+            /*
             MapService mapService_getPoint = retrofit.create(MapService.class);
             Call<ProblemPoint> call_getPoint = mapService_getPoint.getPointByLatAndLong(authString, newPointLat, newPointLng);
 
@@ -295,13 +297,13 @@ public class NewAppFragmentActivity extends Fragment {
                         if (getPointServerAns.equals("Point_not_found")) {
                             alertDialogBuilderInput.setTitle("Ошибка");
                             alertDialogBuilderInput.setMessage("Точка не найдена");
-                            serverError = true;
+                            showAlertDialog = true;
                             loadSuccessfully = false;
 
                         } else if (getPointServerAns.equals("Error")) {
                             alertDialogBuilderInput.setTitle("Ошибка");
                             alertDialogBuilderInput.setMessage("Ошибка сервера");
-                            serverError = true;
+                            showAlertDialog = true;
                             loadSuccessfully = false;
 
                         } else {
@@ -316,7 +318,7 @@ public class NewAppFragmentActivity extends Fragment {
             }
 
 
-
+            */
             // ================= add Note =================
 
             // ======== Message ========
@@ -335,7 +337,7 @@ public class NewAppFragmentActivity extends Fragment {
             // =========================
 
             MapService mapService_addNote = retrofit.create(MapService.class);
-            Call<Object> call_addNote = mapService_addNote.addNote(authString, pointFromServer.getId(), messageToSend);
+            Call<Object> call_addNote = mapService_addNote.addNote(authString, pointId, messageToSend);
 
             Response response_addNote = null;
             try {
@@ -352,29 +354,34 @@ public class NewAppFragmentActivity extends Fragment {
                     if (addNoteServerAns.equals("User_not_authorized")) {
                         alertDialogBuilderInput.setTitle("Ошибка");
                         alertDialogBuilderInput.setMessage("Вы не авторизовались");
-                        serverError = true;
+                        showAlertDialog = true;
                         loadSuccessfully = false;
 
                     } else if (addNoteServerAns.equals("Point_do_not_exist")) {
                         alertDialogBuilderInput.setTitle("Ошибка");
                         alertDialogBuilderInput.setMessage("Точка не добавлена");
-                        serverError = true;
+                        showAlertDialog = true;
                         loadSuccessfully = false;
 
                     } else if (addNoteServerAns.equals("Note_already_exists")) {
                         alertDialogBuilderInput.setTitle("Ошибка");
                         alertDialogBuilderInput.setMessage("Запись уже существует");
-                        serverError = true;
+                        showAlertDialog = true;
                         loadSuccessfully = false;
 
                     } else if (addNoteServerAns.equals("Note_saved")) {
                         loadSuccessfully = true;
+                        // ============= Send complaint =============
+                        new sendComplaintAsyncTask().execute("");
+                        // ==========================================
+
+
 
                     } else {
 
                         alertDialogBuilderInput.setTitle("Ошибка");
                         alertDialogBuilderInput.setMessage("Ошибка загрузки данных");
-                        serverError = true;
+                        showAlertDialog = true;
                         loadSuccessfully = false;
                     }
                 }
@@ -388,9 +395,9 @@ public class NewAppFragmentActivity extends Fragment {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
-            if (serverError) {
+            if (showAlertDialog) {
                 loadSuccessfully = false;
-                displayAlert("server_error");
+                displayAlert("show_alert_dialog");
             }
 
         }
@@ -400,6 +407,7 @@ public class NewAppFragmentActivity extends Fragment {
         // ================= Send Complaint =================
 
         class sendComplaintAsyncTask extends AsyncTask<String, String, String> {
+
 
             @Override
             protected String doInBackground(String... strings) {
@@ -431,19 +439,19 @@ public class NewAppFragmentActivity extends Fragment {
                         if (sendComplaintServerAns.equals("User_not_authorized")) {
                             alertDialogBuilderInput.setTitle("Ошибка");
                             alertDialogBuilderInput.setMessage("Вы не авторизовались");
-                            serverError = true;
+                            showAlertDialog = true;
                             sendSuccessfully = false;
 
                         } else if (sendComplaintServerAns.equals("Point_not_found")) {
                             alertDialogBuilderInput.setTitle("Ошибка");
                             alertDialogBuilderInput.setMessage("Точка не найдена");
-                            serverError = true;
+                            showAlertDialog = true;
                             sendSuccessfully = false;
 
                         } else if (sendComplaintServerAns.equals("Note_already_exists")) {
                             alertDialogBuilderInput.setTitle("Ошибка");
                             alertDialogBuilderInput.setMessage("Запись уже существует");
-                            serverError = true;
+                            showAlertDialog = true;
                             sendSuccessfully = false;
 
                         } else if (sendComplaintServerAns.equals("Message_sent_successfully")) {
@@ -453,10 +461,36 @@ public class NewAppFragmentActivity extends Fragment {
 
                             alertDialogBuilderInput.setTitle("Ошибка");
                             alertDialogBuilderInput.setMessage("Ошибка отправки");
-                            serverError = true;
+                            showAlertDialog = true;
                             sendSuccessfully = false;
                         }
                     }
+                }
+
+                if (loadSuccessfully) {
+                    alertDialogBuilderInput.setTitle("Усешно");
+                    alertDialogBuilderInput.setMessage("Данные успешно загружены на сервер");
+                    showAlertDialog = true;
+
+                    if (sendSuccessfully) {
+                        alertDialogBuilderInput.setTitle("Усешно");
+                        alertDialogBuilderInput.setMessage("Жалоба успешно отправлена");
+                        showAlertDialog = true;
+
+                        Intent i = new Intent(getActivity(), MainActivity.class);
+                        startActivity(i);
+                    } else {
+
+                        alertDialogBuilderInput.setTitle("Ошибка");
+                        alertDialogBuilderInput.setMessage("Ошибка отправки жалобы");
+                        showAlertDialog = true;
+                    }
+
+                } else {
+
+                    alertDialogBuilderInput.setTitle("Ошибка");
+                    alertDialogBuilderInput.setMessage("Ошибка загрузки данных на сервер");
+                    showAlertDialog = true;
                 }
 
                 return null;
@@ -468,8 +502,8 @@ public class NewAppFragmentActivity extends Fragment {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
-            if (serverError) {
-                displayAlert("server_error");
+            if (showAlertDialog) {
+                displayAlert("show_alert_dialog");
             }
 
         }
@@ -479,7 +513,7 @@ public class NewAppFragmentActivity extends Fragment {
         alertDialogBuilderInput.setPositiveButton("Ок", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if (code.equals("server_error")) {
+                if (code.equals("show_alert_dialog")) {
 
                 }
             }

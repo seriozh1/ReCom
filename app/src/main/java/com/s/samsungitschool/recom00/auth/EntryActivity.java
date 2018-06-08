@@ -125,7 +125,7 @@ public class EntryActivity extends AppCompatActivity {
             try {
                 Response response = userResponse.execute();
 
-                authString = response.toString();
+                authString = response.body().toString();
 
                 sharedPreferences = getSharedPreferences("SP", MODE_PRIVATE);
                 editor = sharedPreferences.edit();
