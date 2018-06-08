@@ -278,6 +278,7 @@ public class NewAppFragmentActivity extends Fragment {
 
                     } else {
                         pointId = Long.valueOf(addPointServerAns);
+                        
                         loadSuccessfully = true;
                     }
                 }
