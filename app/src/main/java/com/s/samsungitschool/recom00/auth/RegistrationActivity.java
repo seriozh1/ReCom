@@ -25,6 +25,8 @@ import com.s.samsungitschool.recom00.model.User;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -59,12 +61,12 @@ public class RegistrationActivity extends AppCompatActivity {
 
         alertDialogBuilderInput = new AlertDialog.Builder(RegistrationActivity.this);
 
-        loginEt = (EditText) findViewById(R.id.login_registration_et);
-        passwordEt = (EditText) findViewById(R.id.password_registration_et);
-        emailEt = (EditText) findViewById(R.id.email_registration_et);
-        passwordConfirmEt = (EditText) findViewById(R.id.password_confirm_registration_et);
-        registerBt = (Button) findViewById(R.id.register__registration_bt);
-        entryBt = (Button) findViewById(R.id.enter__registration_bt);
+        loginEt = findViewById(R.id.login_registration_et);
+        passwordEt = findViewById(R.id.password_registration_et);
+        emailEt = findViewById(R.id.email_registration_et);
+        passwordConfirmEt = findViewById(R.id.password_confirm_registration_et);
+        registerBt = findViewById(R.id.register__registration_bt);
+        entryBt = findViewById(R.id.enter__registration_bt);
 
 
         registerBt.setOnClickListener(new View.OnClickListener() {
@@ -92,12 +94,17 @@ public class RegistrationActivity extends AppCompatActivity {
 
             alertDialogBuilderInput.setTitle("Ошибка");
             alertDialogBuilderInput.setMessage("Заполните все поля");
-            errorInput = true;
+            displayAlert("input_error");
         } else if ( !passwordEt.getText().toString().equals(passwordConfirmEt.getText().toString())) {
 
             alertDialogBuilderInput.setTitle("Ошибка");
             alertDialogBuilderInput.setMessage("Пароли не совпадают");
-            errorInput = true;
+            displayAlert("input_error");
+        } else if ( !checkCorrectnessOfEmail(emailEt.getText().toString()) ) {
+
+            alertDialogBuilderInput.setTitle("Ошибка");
+            alertDialogBuilderInput.setMessage("Введеная почта не корректна");
+            displayAlert("input_error");
         } else {
             login = loginEt.getText().toString();
             email = emailEt.getText().toString();
@@ -107,6 +114,12 @@ public class RegistrationActivity extends AppCompatActivity {
             new RegisterAsyncTask().execute("");
         }
 
+    }
+
+    boolean checkCorrectnessOfEmail(String email) {
+        Pattern p = Pattern.compile("[0-9a-zA-Z_\\.\\-]+@[0-9a-zA-Z_\\.\\-]+[a-z]");
+        Matcher m = p.matcher(email);
+        return m.matches();
     }
 
     class RegisterAsyncTask extends AsyncTask<String, String, String> {

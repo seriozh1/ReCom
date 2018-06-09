@@ -198,23 +198,17 @@ public class NewAppFragmentActivity extends Fragment {
                 }
 
                 if (loadSuccessfully) {
-                    Toast.makeText(getActivity(), "Данные успешно загружены на сервер", Toast.LENGTH_LONG).show();
 
                     // ============= Send complaint =============
                     new sendComplaintAsyncTask().execute("");
                     // ==========================================
 
                     if (sendSuccessfully) {
-                        Toast.makeText(getActivity(), "Жалоба успешно отправлена", Toast.LENGTH_LONG).show();
 
                         Intent i = new Intent(getActivity(), MainActivity.class);
                         startActivity(i);
-                    } else {
-                        Toast.makeText(getActivity(), "Ошибка отправки жалобы", Toast.LENGTH_LONG).show();
                     }
 
-                } else {
-                    Toast.makeText(getActivity(), "Ошибка загрузки данных на сервер", Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -294,7 +288,7 @@ public class NewAppFragmentActivity extends Fragment {
                 typeOfProblem = spinnerSign.getSelectedItem().toString();
             }
 
-            messageToSend = "Тип проблемы: " + typeOfProblem + " \n " + messageToSend;
+            messageToSend = "Тип проблемы: " + typeOfProblem + System.lineSeparator() + messageToSend + System.lineSeparator();
             // =========================
 
             MapService mapService_addNote = retrofit.create(MapService.class);
@@ -303,7 +297,7 @@ public class NewAppFragmentActivity extends Fragment {
             Response response_addNote = null;
             try {
                 response_addNote = call_addNote.execute();
-                
+
                 addNoteServerAns = response_addNote.body().toString();
 
             } catch (IOException e) {
@@ -444,11 +438,11 @@ public class NewAppFragmentActivity extends Fragment {
 
                     if (sendSuccessfully) {
                         alertDialogBuilderInput.setTitle("Усешно");
-                        alertDialogBuilderInput.setMessage("Жалоба успешно отправлена");
+                        alertDialogBuilderInput.setMessage("Жалоба успешно отправлена \nВам на почту отправлено пиьсмо");
                         showAlertDialog = true;
 
-                        Intent i = new Intent(getActivity(), MainActivity.class);
-                        startActivity(i);
+                        //Intent i = new Intent(getActivity(), MainActivity.class);
+                        //startActivity(i);
                     } else {
 
                         alertDialogBuilderInput.setTitle("Ошибка");

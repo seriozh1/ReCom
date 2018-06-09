@@ -76,20 +76,12 @@ public class EntryActivity extends AppCompatActivity {
                     alertDialogBuilderInput.setTitle("Ошибка");
                     alertDialogBuilderInput.setMessage("Заполните все поля");
                     displayAlert("input_error");
-                }
-                // Test case
-                else if ( loginEt.getText().toString().equals("test") && passwordEt.getText().toString().equals("123") ) {
-                    Intent i = new Intent(getBaseContext(), MainActivity.class);
-                    i.putExtra(AUTHORISED, true);
-
+                } else {
                     sharedPreferences = getSharedPreferences("SP", MODE_PRIVATE);
                     editor = sharedPreferences.edit();
-                    editor.putString(LOGIN, "test");
-                    editor.putInt(POINTS, 50);
+                    editor.putBoolean(AUTHORISED, true);
                     editor.apply();
 
-                    startActivity(i);
-                } else {
                     new EntryAsyncTask().execute("");
                 }
 
@@ -147,7 +139,7 @@ public class EntryActivity extends AppCompatActivity {
             } else {
                 if (authString.equals("Authentication_failed")) {
                     alertDialogBuilderInput.setTitle("Ошибка авторизации");
-                    alertDialogBuilderInput.setMessage("Проверьте вводимые данные и повторите попытку");
+                    alertDialogBuilderInput.setMessage("Неверно введено логин/пароль");
                     errorInput = true;
                 } else {
 
