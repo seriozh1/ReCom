@@ -142,11 +142,12 @@ public class MainActivity extends AppCompatActivity
         }
         else if (id == R.id.nav_map) {
             fragmentTransaction.replace(R.id.container, this.mapFragment);
-        }
-        else if (id == R.id.nav_applications) {
+        } else if (id == R.id.nav_applications) {
             fragmentTransaction.replace(R.id.container, this.applicationsFragmentActivity);
         }
-        else if (id == R.id.nav_draft) {
+
+
+        /*else if (id == R.id.nav_draft) {
             fragmentTransaction.replace(R.id.container, this.draftFragmentActivity);
         }
         else if (id == R.id.nav_rating) {
@@ -169,7 +170,7 @@ public class MainActivity extends AppCompatActivity
         }
         else if (id == R.id.nav_send) {
             fragmentTransaction.replace(R.id.container, this.sendFragmentActivity);
-        }
+        }*/
 
         item.setChecked(true);
         setTitle(item.getTitle());

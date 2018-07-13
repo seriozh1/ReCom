@@ -35,7 +35,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RegistrationActivity extends AppCompatActivity {
 
-    private static final String URI_FOR_REGISTRATION = "http://37.112.201.156:80";
+    private static final String URI_FOR_REGISTRATION = "http://recom.info.tm";
 
     ProgressDialog progressDialog;
     AlertDialog.Builder alertDialogBuilderInput;

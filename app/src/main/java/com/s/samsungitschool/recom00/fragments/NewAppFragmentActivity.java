@@ -54,7 +54,7 @@ public class NewAppFragmentActivity extends Fragment {
     AlertDialog.Builder ad;
     Context context;
 
-    private static final String URI_FOR_REGISTRATION = "http://37.112.201.156:80";
+    private static final String URI_FOR_REGISTRATION = "http://recom.info.tm";
 
     AlertDialog.Builder alertDialogBuilderInput;
 

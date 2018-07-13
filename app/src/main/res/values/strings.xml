@@ -64,6 +64,7 @@
     <string name="Comment">Комментарий</string>
     <string name="Send">Отправить</string>
     <string name="In_developing">В разработке ...</string>
+    <string name="MyApplications">Мои заявления</string>
 
     <string-array name="problemList">
         <item>Парковка</item>
