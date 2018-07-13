@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,10 +22,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.s.samsungitschool.recom00.R;
 import com.s.samsungitschool.recom00.interfaces.RegisterUserService;
+import com.s.samsungitschool.recom00.model.Application;
 import com.s.samsungitschool.recom00.model.User;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -51,10 +56,17 @@ public class RegistrationActivity extends AppCompatActivity {
     boolean errorInput = false;
     boolean registrationSuccessful = false;
 
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+    private final String MY_APPLICATIONS_LIST = "MY_APPLICATIONS_LIST";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
+
+        sharedPreferences = getSharedPreferences("SP", MODE_PRIVATE);
+
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
@@ -204,6 +216,13 @@ public class RegistrationActivity extends AppCompatActivity {
             }
             if (registrationSuccessful) {
                 Toast.makeText(getBaseContext(), "Регистрация успешна", Toast.LENGTH_LONG).show();
+
+
+                editor = sharedPreferences.edit();
+
+                ArrayList<Application> myApplicationsList = new ArrayList<>();
+                editor.putString(MY_APPLICATIONS_LIST, new Gson().toJson(myApplicationsList));
+                editor.apply();
             }
         }
     }
