@@ -55,6 +55,7 @@ public class ApplicationsFragmentActivity extends Fragment {
             Toast.makeText(getActivity(), "Ошибка получения списка жалоб", Toast.LENGTH_SHORT).show();
         } else {
             //myApplicationsList = new Gson().fromJson(SPList);
+            
         }
 
     }
