@@ -23,7 +23,11 @@ import com.google.gson.GsonBuilder;
 import com.s.samsungitschool.recom00.R;
 import com.s.samsungitschool.recom00.interfaces.RegisterUserService;
 import com.s.samsungitschool.recom00.model.Application;
+import com.s.samsungitschool.recom00.model.Note;
+import com.s.samsungitschool.recom00.model.ProblemPoint;
 import com.s.samsungitschool.recom00.model.User;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -221,6 +225,10 @@ public class RegistrationActivity extends AppCompatActivity {
                 editor = sharedPreferences.edit();
 
                 ArrayList<Application> myApplicationsList = new ArrayList<>();
+                myApplicationsList.add(new Application(new Note(), new ProblemPoint(0, 0) ));
+                myApplicationsList.add(new Application(new Note(), new ProblemPoint(0, 2) ));
+
+                String jsonString = new Gson().toJson(myApplicationsList);
                 editor.putString(MY_APPLICATIONS_LIST, new Gson().toJson(myApplicationsList));
                 editor.apply();
             }
