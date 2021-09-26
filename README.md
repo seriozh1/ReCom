@@ -1,6 +1,6 @@
 # ReCom. Social project.
 
-![Image](Files/Main_slide.png)
+![Image](Files/main_slide.png)
 
 [Presentation](Files/ReCom_presentation.pdf)
 
