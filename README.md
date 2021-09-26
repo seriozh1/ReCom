@@ -1,7 +1,9 @@
 # ReCom. Social project.
 
-[Презентация](Files/ReCom_presentation.pdf)
+![Image](Files/Main_slide.png)
 
-[Пояснительная записка](Files/ReCom_Note.pdf)
+[Presentation](Files/ReCom_presentation.pdf)
 
-[Видео](Files/ReCom_Final.mp4)
+[Explanatory note](Files/ReCom_Note.pdf)
+
+[Video](Files/ReCom_Final.mp4)
